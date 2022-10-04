@@ -25,7 +25,7 @@ public class ItemController {
     @RequestMapping(path = "/newitem", method = RequestMethod.POST)
     public ResponseEntity<String> addNewItem(@RequestBody ArrayList<Item> itemList){
         itemService.addNewItem(itemList);
-        return new ResponseEntity<>("items added successfully", HttpStatus.CREATED);
+        return new ResponseEntity<>("items added successfully", HttpStatus.OK);
     }
     @RequestMapping(path = "/itemquantity/{id}", method = RequestMethod.PUT)
     public ResponseEntity<JSONResponse> updateItemQuantity(@PathVariable(name = "id") int itemid, @RequestBody Item item){
@@ -50,41 +50,41 @@ public class ItemController {
         return new ResponseEntity<>(itemService.getAllItems(), HttpStatus.OK);
     }
 
-    public static void testItemJson(){
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            Item item1 = new Item(4,"Bread",70.00,4);
-            String itemString = objectMapper.writeValueAsString(item1);
-
-            Item item  = objectMapper.readValue(itemString,Item.class);
-            HashMap<String, Object> itemHashMap = new HashMap<>();
-            itemHashMap.put("item",item);
-            objectMapper.writeValue(new File(Config.FILE_PATH+"/item.json"), itemHashMap);
-
-            HashMap<String, OrderItem> orderItemHashMap = new HashMap<>();
-
-//            OrderItem orderItem = new OrderItem(1, 2,item.getItemNumber());
-            OrderItem orderItem = new OrderItem();
-            orderItemHashMap.put("orderItem",orderItem);
-            objectMapper.writeValue(new File(Config.FILE_PATH+"/orderitem.json"), orderItemHashMap);
-            Account account = new Account("3904059/AC", 90000.00);
-            Date orderDate = new Date(1,9,2022);
-            Address address = objectMapper.readValue(new File(Config.FILE_PATH+"/address.json"),Address.class);
-
-            Customer customer = new BusinessCustomer("parity",account,address,9,"0703828949");
-            ArrayList<Integer> orderItems = new ArrayList<>();
-            Order order = new Order(1,orderDate,customer.getCustomerNumber(),orderItems);
-
-            HashMap<String, Order> orderHashMap = new HashMap<>();
-            orderHashMap.put("order",order);
-            objectMapper.writeValue(new File(Config.FILE_PATH+"/order.json"), orderHashMap);
-
-
-
-
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    public static void testItemJson(){
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        try {
+//            Item item1 = new Item(4,"Bread",70.00,4);
+//            String itemString = objectMapper.writeValueAsString(item1);
+//
+//            Item item  = objectMapper.readValue(itemString,Item.class);
+//            HashMap<String, Object> itemHashMap = new HashMap<>();
+//            itemHashMap.put("item",item);
+//            objectMapper.writeValue(new File(Config.FILE_PATH+"/item.json"), itemHashMap);
+//
+//            HashMap<String, OrderItem> orderItemHashMap = new HashMap<>();
+//
+////            OrderItem orderItem = new OrderItem(1, 2,item.getItemNumber());
+//            OrderItem orderItem = new OrderItem();
+//            orderItemHashMap.put("orderItem",orderItem);
+//            objectMapper.writeValue(new File(Config.FILE_PATH+"/orderitem.json"), orderItemHashMap);
+//            Account account = new Account("3904059/AC", 90000.00);
+//            Date orderDate = new Date(1,9,2022);
+//            Address address = objectMapper.readValue(new File(Config.FILE_PATH+"/address.json"),Address.class);
+//
+//            Customer customer = new BusinessCustomer("parity",account,address,9,"0703828949");
+//            ArrayList<Integer> orderItems = new ArrayList<>();
+////            Order order = new Order(1,orderDate,customer.getCustomerNumber(),orderItems);
+//
+//            HashMap<String, Order> orderHashMap = new HashMap<>();
+//            orderHashMap.put("order",order);
+//            objectMapper.writeValue(new File(Config.FILE_PATH+"/order.json"), orderHashMap);
+//
+//
+//
+//
+//
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 }

@@ -30,9 +30,9 @@ public class Order {
     public Order() {
     }
 
-    public Order(int orderNumber, Date orderDate, int customerid, ArrayList<Integer> orderItems) {
+    public Order(int orderNumber,  int customerid, ArrayList<Integer> orderItems) {
         this.orderNumber = orderNumber;
-        this.orderDate = orderDate;
+
         this.customerid = customerid;
 //        if(orderItems.isEmpty()){
 //            orderItems.add(DEFAULT_ORDER_ITEM.getItemNumber());
@@ -56,13 +56,13 @@ public class Order {
         this.orderNumber = orderNumber;
     }
 
-    public Date getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(Date orderDate) {
-        this.orderDate = orderDate;
-    }
+//    public Date getOrderDate() {
+//        return orderDate;
+//    }
+//
+//    public void setOrderDate(Date orderDate) {
+//        this.orderDate = orderDate;
+//    }
 
 
 

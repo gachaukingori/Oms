@@ -6,7 +6,7 @@ import com.projects.oms.models.Address;
 import com.projects.oms.models.Customer;
 import com.projects.oms.models.JSONResponse;
 import com.projects.oms.services.CustomerService;
-import jakarta.annotation.Resource;
+//import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ public class CustomerController {
         customerService.createNewCustomer(customerList);
         jsonResponse.setMessage("Customer added succesfully");
         jsonResponse.setStatus(HttpStatus.CREATED.toString());
-        return new ResponseEntity<>(jsonResponse, HttpStatus.CREATED);
+        return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
     }
     @RequestMapping(path="/allcustomers", method = RequestMethod.GET)
     public ResponseEntity<Collection<Customer>> getAllCustomers(@RequestParam(value = "customerId", required = false) Optional<Integer> customerid){

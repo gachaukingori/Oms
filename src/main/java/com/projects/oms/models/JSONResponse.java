@@ -4,8 +4,7 @@ public class JSONResponse {
     private String message;
     private String status;
 
-    public JSONResponse() {
-    }
+
 
     public String getMessage() {
         return message;

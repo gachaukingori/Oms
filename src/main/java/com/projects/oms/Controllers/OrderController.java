@@ -24,7 +24,7 @@ public class OrderController {
 
     @RequestMapping(path = "/createOrder", method = RequestMethod.POST)
     public ResponseEntity<String> createNewOrder(@RequestBody Order order){
-        return new ResponseEntity<>(orderService.createOrder(order), HttpStatus.CREATED);
+        return new ResponseEntity<>(orderService.createOrder(order), HttpStatus.OK);
     }
 
     @RequestMapping(path="/getOrders", method = RequestMethod.GET)

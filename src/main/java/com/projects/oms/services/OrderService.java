@@ -15,7 +15,7 @@ public class OrderService {
 
     public String createOrder(Order order){
 
-        logger.info("the order objcet is " + order.toString());
+//        logger.info("the order objcet is " + order.toString());
         if(!CustomerService.customerHashMap.containsKey(order.getCustomerid())) {
             return "Customer no "+ order.getCustomerid()+" not found";
         }
