@@ -20,9 +20,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 
 @SpringBootApplication
+@EnableEurekaClient
 public class OmsApplication extends SpringBootServletInitializer {
 	public static final Logger logger =
 			LoggerFactory.getLogger(OmsApplication.class);
