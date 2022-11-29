@@ -3,6 +3,8 @@ package com.projects.oms.services;
 import com.projects.oms.Controllers.CustomerController;
 import com.projects.oms.models.Customer;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,19 +15,24 @@ import java.util.logging.Logger;
 @Service
 public class CustomerService implements CustomerServiceInterface {
    static HashMap<Integer, Customer> customerHashMap = new HashMap();
-
+   @Autowired
+   JdbcTemplate db;
     public static final org.slf4j.Logger logger =
             LoggerFactory.getLogger(CustomerController.class);
 
 
     @Override
     public void createNewCustomer(ArrayList<Customer> customerList) {
+        db.execute("CREATE TABLE CUSTOMERS ( ID INT(10), FNAME VARCHAR(255), LNAME VARCHAR(255) )");
         customerList.forEach((customer)->{
+
             customerHashMap.put(customer.getCustomerNumber(), customer);
         });
 
 
     }
+
+
 
     @Override
     public String deleteCustomer(int customerId) {
@@ -35,6 +42,8 @@ public class CustomerService implements CustomerServiceInterface {
         }else{
             return "customer " + customerId +" does not exist";
         }
+
+
 
     }
 
