@@ -41,6 +41,9 @@ public abstract class Customer {
     private ArrayList<Order>orders;
 
 
+
+
+
     public Customer(Account account, Address deliveryAddress, int customerNumber, String telephoneNumber) {
         this.account = account;
         this.deliveryAddress = deliveryAddress;

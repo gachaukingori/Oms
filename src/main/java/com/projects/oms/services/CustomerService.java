@@ -5,8 +5,12 @@ import com.projects.oms.models.Customer;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.stereotype.Service;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -23,10 +27,30 @@ public class CustomerService implements CustomerServiceInterface {
 
     @Override
     public void createNewCustomer(ArrayList<Customer> customerList) {
-        db.execute("CREATE TABLE CUSTOMERS ( ID INT(10), FNAME VARCHAR(255), LNAME VARCHAR(255) )");
+//        db.execute("CREATE TABLE CUSTOMERS ( ID INT(10), FNAME VARCHAR(255), LNAME VARCHAR(255) )");
+
+
+
+
         customerList.forEach((customer)->{
 
             customerHashMap.put(customer.getCustomerNumber(), customer);
+        PreparedStatementCreator psc =new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+                PreparedStatement ps = con.prepareStatement("INSERT INTO CUSTOMERS VALUES(?,?,?,?,?,?)");
+                ps.setInt(1,customer.getCustomerNumber());
+                ps.setInt(2,customer.getCustomerNumber());
+                ps.setString(3,customer.getAccount().toString() );
+                ps.setString(4,customer.getDeliveryAddress().toString());
+                ps.setString(5,customer.getBillingAddress().toString());
+                ps.setString(6,customer.getName());
+//                ps.setString(7,customer.());
+
+                return null;
+            }
+        };
+//            db.query(psc, );
         });
 
 
