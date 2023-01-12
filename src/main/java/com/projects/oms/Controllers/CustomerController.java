@@ -43,7 +43,7 @@ public class CustomerController {
         jsonResponse.setStatus(HttpStatus.CREATED.toString());
         return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
     }
-    @RequestMapping(path="/", method = RequestMethod.GET)
+    @RequestMapping(path="/allcustomers", method = RequestMethod.GET)
     public ResponseEntity<Collection<Customer>> getAllCustomers(@RequestParam(value = "customerId", required = false) Optional<Integer> customerid){
         if(!customerid.isPresent()){
             return new ResponseEntity<>(customerService.getAllCustomers(), HttpStatus.OK);

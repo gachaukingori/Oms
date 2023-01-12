@@ -1,15 +1,16 @@
 package com.projects.oms.services;
 
 import com.projects.oms.Controllers.CustomerController;
-import com.projects.oms.models.Customer;
+import com.projects.oms.models.*;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.*;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,27 +31,35 @@ public class CustomerService implements CustomerServiceInterface {
 //        db.execute("CREATE TABLE CUSTOMERS ( ID INT(10), FNAME VARCHAR(255), LNAME VARCHAR(255) )");
 
 
+//        PreparedStatementCreator preparedStatement = db.execute()
+        PreparedStatementCreator psc = new PreparedStatementCreator() {
+            String query = "INSERT INTO CUSTOMERS (CUSTOMERNO, ACCTNO, DELIVERYADDRESS, BILLINGADDRESS, TELEPHONE, FNAME) " +
+                    "VALUES (?,?,?,?,?,?)";
+            @Override
+            public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+
+              return  con.prepareStatement(query);
+            }
+        };
 
 
         customerList.forEach((customer)->{
 
             customerHashMap.put(customer.getCustomerNumber(), customer);
-        PreparedStatementCreator psc =new PreparedStatementCreator() {
-            @Override
-            public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-                PreparedStatement ps = con.prepareStatement("INSERT INTO CUSTOMERS VALUES(?,?,?,?,?,?)");
-                ps.setInt(1,customer.getCustomerNumber());
-                ps.setInt(2,customer.getCustomerNumber());
-                ps.setString(3,customer.getAccount().toString() );
-                ps.setString(4,customer.getDeliveryAddress().toString());
-                ps.setString(5,customer.getBillingAddress().toString());
-                ps.setString(6,customer.getName());
-//                ps.setString(7,customer.());
 
-                return null;
-            }
-        };
-//            db.query(psc, );
+
+            db.execute(psc, (PreparedStatementCallback<Boolean>) ps -> {
+                ps.setInt(1,customer.getCustomerNumber());
+                ps.setString(2,customer.getAccount().getAccountno());
+                ps.setString(3,customer.getDeliveryAddress().getPostcode());
+                ps.setString(4,customer.getBillingAddress().getPostcode());
+                ps.setString(5,customer.getTelephoneNumber());
+                ps.setString(6,customer.getName());
+//                logger.info("PREPARED STATEMENT" + ps.toString());
+
+                return  ps.execute();
+            });
+
         });
 
 
@@ -89,7 +98,38 @@ public class CustomerService implements CustomerServiceInterface {
         customerHashMap.forEach((count, element)->{
             logger.info("\n element:"+count + " : \n "+element.toString());
         });
-        return customerHashMap.values();
+
+
+        PreparedStatementCreator psc = new PreparedStatementCreator() {
+            String query = "SELECT * FROM CUSTOMERS";
+            @Override
+            public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+                return con.prepareStatement(query);
+            }
+        };
+
+      return  db.query(psc, new ResultSetExtractor<HashMap<Integer,Customer>>() {
+            @Override
+            public HashMap<Integer, Customer> extractData(ResultSet rs) throws SQLException, DataAccessException {
+                HashMap<Integer, Customer> hashMap = new HashMap<>();
+                int count = 0;
+                while(rs.next()){
+
+                    count++;
+                    BusinessCustomer customer = new BusinessCustomer();
+                    customer.setCustomerNumber(rs.getInt("CUSTOMERNO"));
+                    customer.setAccount(new Account(rs.getString("ACCTNO"),0));
+                    customer.setDeliveryAddress(new Address(rs.getString("DELIVERYADDRESS"),"",""));
+                    customer.setTelephoneNumber(rs.getString("TELEPHONE"));
+//                    customer.(rs.getString("TELEPHONE"));
+                    customer.setCompanyName(rs.getString("FNAME"));
+                    hashMap.put(count,customer);
+                }
+                return hashMap;
+            }
+        }).values();
+
+//        return customerHashMap.values();
     }
 
     @Override
