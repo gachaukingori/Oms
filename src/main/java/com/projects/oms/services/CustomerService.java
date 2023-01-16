@@ -2,6 +2,7 @@ package com.projects.oms.services;
 
 import com.projects.oms.Controllers.CustomerController;
 import com.projects.oms.models.*;
+import com.projects.oms.repositories.CustomerRepository;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -18,8 +19,11 @@ import java.util.HashMap;
 import java.util.logging.Logger;
 
 @Service
-public class CustomerService implements CustomerServiceInterface {
+public class CustomerService implements CustomerServiceInterface, PreparedStatementCreator {
    static HashMap<Integer, Customer> customerHashMap = new HashMap();
+    private CustomerRepository customerRepository;
+    String query;
+
    @Autowired
    JdbcTemplate db;
     public static final org.slf4j.Logger logger =
@@ -68,8 +72,15 @@ public class CustomerService implements CustomerServiceInterface {
 
 
     @Override
-    public String deleteCustomer(int customerId) {
-        if(customerHashMap.containsKey(customerId)){
+    public String deleteCustomer(int customerId) throws SQLException {
+        String query = "DELETE FROM  CUSTOMERS WHERE CUSTOMERNO =?";
+        customerRepository = new CustomerRepository(query);
+        Boolean deleted = db.execute(con -> con.prepareStatement(query), (PreparedStatementCallback<Boolean>) ps -> {
+            ps.setInt(1, customerId);
+                logger.info(ps.toString());
+            return ps.execute();
+        });
+        if(deleted){
             customerHashMap.remove(customerId);
             return "customer " + customerId +" deleted successfully";
         }else{
@@ -108,26 +119,23 @@ public class CustomerService implements CustomerServiceInterface {
             }
         };
 
-      return  db.query(psc, new ResultSetExtractor<HashMap<Integer,Customer>>() {
-            @Override
-            public HashMap<Integer, Customer> extractData(ResultSet rs) throws SQLException, DataAccessException {
-                HashMap<Integer, Customer> hashMap = new HashMap<>();
-                int count = 0;
-                while(rs.next()){
+      return  db.query(con->con.prepareStatement(query), rs -> {
+          HashMap<Integer, Customer> hashMap = new HashMap<>();
+          int count = 0;
+          while(rs.next()){
 
-                    count++;
-                    BusinessCustomer customer = new BusinessCustomer();
-                    customer.setCustomerNumber(rs.getInt("CUSTOMERNO"));
-                    customer.setAccount(new Account(rs.getString("ACCTNO"),0));
-                    customer.setDeliveryAddress(new Address(rs.getString("DELIVERYADDRESS"),"",""));
-                    customer.setTelephoneNumber(rs.getString("TELEPHONE"));
+              count++;
+              BusinessCustomer customer = new BusinessCustomer();
+              customer.setCustomerNumber(rs.getInt("CUSTOMERNO"));
+              customer.setAccount(new Account(rs.getString("ACCTNO"),0));
+              customer.setDeliveryAddress(new Address(rs.getString("DELIVERYADDRESS"),"",""));
+              customer.setTelephoneNumber(rs.getString("TELEPHONE"));
 //                    customer.(rs.getString("TELEPHONE"));
-                    customer.setCompanyName(rs.getString("FNAME"));
-                    hashMap.put(count,customer);
-                }
-                return hashMap;
-            }
-        }).values();
+              customer.setCompanyName(rs.getString("FNAME"));
+              hashMap.put(count,customer);
+          }
+          return hashMap;
+      }).values();
 
 //        return customerHashMap.values();
     }
@@ -135,5 +143,10 @@ public class CustomerService implements CustomerServiceInterface {
     @Override
     public void updateCustomer(int customerId, Customer customer) {
 
+    }
+
+    @Override
+    public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+        return null;
     }
 }

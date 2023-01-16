@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.projects.oms.models.Address;
 import com.projects.oms.models.Customer;
 import com.projects.oms.models.JSONResponse;
+import com.projects.oms.repositories.CustomerRepository;
 import com.projects.oms.services.CustomerService;
 //import jakarta.annotation.Resource;
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -31,7 +33,8 @@ public class CustomerController {
     @Autowired
     CustomerService customerService;
 
-    private JSONResponse jsonResponse = new JSONResponse();
+    private final JSONResponse jsonResponse = new JSONResponse();
+
 
 
     @RequestMapping(path = "/newcustomer", method = RequestMethod.POST)
@@ -54,7 +57,7 @@ public class CustomerController {
     }
 
     @RequestMapping(path = "/customer/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<JSONResponse> deleteCustomer(@PathVariable ("id") int customerid){
+    public ResponseEntity<JSONResponse> deleteCustomer(@PathVariable ("id") int customerid) throws SQLException {
 
    String message= customerService.deleteCustomer(customerid);
         jsonResponse.setStatus(HttpStatus.OK.toString());
