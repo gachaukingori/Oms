@@ -33,7 +33,7 @@ public class CustomerService implements CustomerServiceInterface, PreparedStatem
     @Override
     public void createNewCustomer(ArrayList<Customer> customerList) {
 //        db.execute("CREATE TABLE CUSTOMERS ( ID INT(10), FNAME VARCHAR(255), LNAME VARCHAR(255) )");
-
+            logger.info("Customer object " + customerList.get(0));
 
 //        PreparedStatementCreator preparedStatement = db.execute()
         PreparedStatementCreator psc = new PreparedStatementCreator() {
@@ -52,13 +52,28 @@ public class CustomerService implements CustomerServiceInterface, PreparedStatem
             customerHashMap.put(customer.getCustomerNumber(), customer);
 
 
-            db.execute(psc, (PreparedStatementCallback<Boolean>) ps -> {
+            db.execute(con -> {
+              String query ;
+                if(customer instanceof  BusinessCustomer){
+                    query = "INSERT INTO CUSTOMERS (CUSTOMERNO, ACCTNO, DELIVERYADDRESS, BILLINGADDRESS, TELEPHONE, FNAME) " +
+                            "VALUES (?,?,?,?,?,?)";
+                }else{
+                    query = "INSERT INTO CUSTOMERS (CUSTOMERNO, ACCTNO, DELIVERYADDRESS, BILLINGADDRESS, TELEPHONE, FNAME, LNAME) " +
+                            "VALUES (?,?,?,?,?,?,?)";
+                }
+                return con.prepareStatement(query);
+            }, (PreparedStatementCallback<Boolean>) ps -> {
                 ps.setInt(1,customer.getCustomerNumber());
                 ps.setString(2,customer.getAccount().getAccountno());
                 ps.setString(3,customer.getDeliveryAddress().getPostcode());
                 ps.setString(4,customer.getBillingAddress().getPostcode());
                 ps.setString(5,customer.getTelephoneNumber());
-                ps.setString(6,customer.getName());
+                if(customer instanceof  BusinessCustomer) {
+                    ps.setString(6, customer.getName());
+                }else{
+                    ps.setString(6, customer.getName());
+                    ps.setString(7, customer.getName());
+                }
 //                logger.info("PREPARED STATEMENT" + ps.toString());
 
                 return  ps.execute();
@@ -95,12 +110,29 @@ public class CustomerService implements CustomerServiceInterface, PreparedStatem
     public Collection<Customer> findCustomer(int customerId) {
         Customer[] tempCustomer = {null};
         HashMap<Integer,Customer > temp = new HashMap<>();
-        customerHashMap.forEach((count, element)->{
-            if(count == customerId){
-                tempCustomer[0] = customerHashMap.get(customerId);
-                temp.put(customerId,tempCustomer[0]);
-            }
-        });
+//        customerHashMap.forEach((count, element)->{
+//            if(count == customerId){
+//                tempCustomer[0] = customerHashMap.get(customerId);
+//                temp.put(customerId,tempCustomer[0]);
+//            }
+//        });
+
+       Customer customer = db.execute((PreparedStatementCreator) con -> con.prepareStatement("SELECT * FROM CUSTOMERS WHERE CUSTOMERNO =? ")
+               , (PreparedStatementCallback<Customer>) ps -> {
+                   ps.setInt(1, customerId);
+                   ResultSet rs = ps.executeQuery();
+                   BusinessCustomer customer1 = new BusinessCustomer();
+                   if(rs.next()){
+                       customer1.setCustomerNumber(rs.getInt("CUSTOMERNO"));
+                       customer1.setAccount(new Account(rs.getString("ACCTNO"),0));
+                       customer1.setDeliveryAddress(new Address(rs.getString("DELIVERYADDRESS"),"",""));
+                       customer1.setTelephoneNumber(rs.getString("TELEPHONE"));
+                       customer1.setCompanyName(rs.getString("FNAME"));
+                   }
+                   return customer1;
+               });
+            temp.put(1,customer);
+
         return temp.values();
     }
 
@@ -118,20 +150,37 @@ public class CustomerService implements CustomerServiceInterface, PreparedStatem
                 return con.prepareStatement(query);
             }
         };
-
+        query = "SELECT * FROM CUSTOMERS";
       return  db.query(con->con.prepareStatement(query), rs -> {
           HashMap<Integer, Customer> hashMap = new HashMap<>();
           int count = 0;
           while(rs.next()){
 
               count++;
-              BusinessCustomer customer = new BusinessCustomer();
+              Customer customer ;
+              logger.info("RESULTSET "+rs.toString());
+                String lname = rs.getString("LNAME");
+
+              if(lname.isEmpty()) {
+                   customer = new BusinessCustomer();
+              }else{
+                   customer = new PrivateCustomer();
+              }
               customer.setCustomerNumber(rs.getInt("CUSTOMERNO"));
               customer.setAccount(new Account(rs.getString("ACCTNO"),0));
               customer.setDeliveryAddress(new Address(rs.getString("DELIVERYADDRESS"),"",""));
               customer.setTelephoneNumber(rs.getString("TELEPHONE"));
 //                    customer.(rs.getString("TELEPHONE"));
-              customer.setCompanyName(rs.getString("FNAME"));
+
+                    if (customer instanceof BusinessCustomer) {
+                        ((BusinessCustomer) customer).setCompanyName(rs.getString("FNAME"));
+                    }else{
+                        ((PrivateCustomer) customer).setFirstName(rs.getString("FNAME"));
+                        ((PrivateCustomer) customer).setLastName(rs.getString("LNAME"));
+                    }
+
+
+
               hashMap.put(count,customer);
           }
           return hashMap;
