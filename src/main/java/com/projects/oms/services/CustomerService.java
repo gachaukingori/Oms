@@ -55,11 +55,11 @@ public class CustomerService implements CustomerServiceInterface, PreparedStatem
             db.execute(con -> {
               String query ;
                 if(customer instanceof  BusinessCustomer){
-                    query = "INSERT INTO CUSTOMERS (CUSTOMERNO, ACCTNO, DELIVERYADDRESS, BILLINGADDRESS, TELEPHONE, FNAME) " +
-                            "VALUES (?,?,?,?,?,?)";
-                }else{
-                    query = "INSERT INTO CUSTOMERS (CUSTOMERNO, ACCTNO, DELIVERYADDRESS, BILLINGADDRESS, TELEPHONE, FNAME, LNAME) " +
+                    query = "INSERT INTO CUSTOMERS (CUSTOMERNO, ACCTNO, DELIVERYADDRESS, BILLINGADDRESS, TELEPHONE, CUSTOMERNAME, CUSTOMERTYPE) " +
                             "VALUES (?,?,?,?,?,?,?)";
+                }else{
+                    query = "INSERT INTO CUSTOMERS (CUSTOMERNO, ACCTNO, DELIVERYADDRESS, BILLINGADDRESS, TELEPHONE, CUSTOMERNAME,CUSTOMERTYPE,FNAME,LNAME) " +
+                            "VALUES (?,?,?,?,?,?,?,?,?)";
                 }
                 return con.prepareStatement(query);
             }, (PreparedStatementCallback<Boolean>) ps -> {
@@ -68,11 +68,13 @@ public class CustomerService implements CustomerServiceInterface, PreparedStatem
                 ps.setString(3,customer.getDeliveryAddress().getPostcode());
                 ps.setString(4,customer.getBillingAddress().getPostcode());
                 ps.setString(5,customer.getTelephoneNumber());
+                ps.setString(6, customer.getName());
                 if(customer instanceof  BusinessCustomer) {
-                    ps.setString(6, customer.getName());
+                    ps.setString(7, "B");
                 }else{
-                    ps.setString(6, customer.getName());
-                    ps.setString(7, customer.getName());
+                    ps.setString(7, "P");
+                    ps.setString(8,  ((PrivateCustomer) customer).getFirstName());
+                    ps.setString(9,  ((PrivateCustomer) customer).getLastName());
                 }
 //                logger.info("PREPARED STATEMENT" + ps.toString());
 
@@ -158,10 +160,10 @@ public class CustomerService implements CustomerServiceInterface, PreparedStatem
 
               count++;
               Customer customer ;
-              logger.info("RESULTSET "+rs.toString());
-                String lname = rs.getString("LNAME");
+//              logger.info("RESULTSET "+rs.toString());
+                String customerType = rs.getString("CUSTOMERTYPE");
 
-              if(lname.isEmpty()) {
+              if(customerType.equals("B")) {
                    customer = new BusinessCustomer();
               }else{
                    customer = new PrivateCustomer();
@@ -173,7 +175,7 @@ public class CustomerService implements CustomerServiceInterface, PreparedStatem
 //                    customer.(rs.getString("TELEPHONE"));
 
                     if (customer instanceof BusinessCustomer) {
-                        ((BusinessCustomer) customer).setCompanyName(rs.getString("FNAME"));
+                        ((BusinessCustomer) customer).setCompanyName(rs.getString("CUSTOMERNAME"));
                     }else{
                         ((PrivateCustomer) customer).setFirstName(rs.getString("FNAME"));
                         ((PrivateCustomer) customer).setLastName(rs.getString("LNAME"));
