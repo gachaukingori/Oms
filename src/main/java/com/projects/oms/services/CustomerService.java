@@ -55,11 +55,14 @@ public class CustomerService implements CustomerServiceInterface, PreparedStatem
             db.execute(con -> {
               String query ;
                 if(customer instanceof  BusinessCustomer){
-                    query = "INSERT INTO CUSTOMERS (CUSTOMERNO, ACCTNO, DELIVERYADDRESS, BILLINGADDRESS, TELEPHONE, CUSTOMERNAME, CUSTOMERTYPE) " +
-                            "VALUES (?,?,?,?,?,?,?)";
+                    query = "INSERT INTO CUSTOMERS (CUSTOMERNO, ACCTNO, DELIVERYADDRESS, BILLINGADDRESS, TELEPHONE, CUSTOMERNAME, CUSTOMERTYPE," +
+                            "ACCOUNTNO, ACCOUNTBAL, BILLING_POSTCODE, BILLING_TOWN, BILLING_STREET, DELIVERY_POSTCODE, DELIVERY_TOWN, DELIVERY_STREET  ) " +
+                            "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                 }else{
-                    query = "INSERT INTO CUSTOMERS (CUSTOMERNO, ACCTNO, DELIVERYADDRESS, BILLINGADDRESS, TELEPHONE, CUSTOMERNAME,CUSTOMERTYPE,FNAME,LNAME) " +
-                            "VALUES (?,?,?,?,?,?,?,?,?)";
+                    query = "INSERT INTO CUSTOMERS (CUSTOMERNO, ACCTNO, DELIVERYADDRESS, BILLINGADDRESS, TELEPHONE," +
+                            " CUSTOMERNAME,CUSTOMERTYPE,FNAME,LNAME, " +
+                            "ACCOUNTNO, ACCOUNTBAL, BILLING_POSTCODE, BILLING_TOWN, BILLING_STREET, DELIVERY_POSTCODE, DELIVERY_TOWN, DELIVERY_STREET  ) " +
+                            "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                 }
                 return con.prepareStatement(query);
             }, (PreparedStatementCallback<Boolean>) ps -> {
@@ -71,10 +74,28 @@ public class CustomerService implements CustomerServiceInterface, PreparedStatem
                 ps.setString(6, customer.getName());
                 if(customer instanceof  BusinessCustomer) {
                     ps.setString(7, "B");
+                    ps.setString(8, customer.getAccount().getAccountno());
+                    ps.setDouble(9, customer.getAccount().getAccountbal());
+                    ps.setString(10, customer.getBillingAddress().getPostcode());
+                    ps.setString(11, customer.getBillingAddress().getStreet());
+                    ps.setString(12, customer.getBillingAddress().getStreet());
+                    ps.setString(13, customer.getDeliveryAddress().getPostcode());
+                    ps.setString(14, customer.getDeliveryAddress().getStreet());
+                    ps.setString(15, customer.getDeliveryAddress().getStreet());
+
                 }else{
                     ps.setString(7, "P");
                     ps.setString(8,  ((PrivateCustomer) customer).getFirstName());
                     ps.setString(9,  ((PrivateCustomer) customer).getLastName());
+                    ps.setString(10, customer.getAccount().getAccountno());
+                    ps.setDouble(11, customer.getAccount().getAccountbal());
+                    ps.setString(12, customer.getBillingAddress().getPostcode());
+                    ps.setString(13, customer.getBillingAddress().getStreet());
+                    ps.setString(14, customer.getBillingAddress().getStreet());
+                    ps.setString(15, customer.getDeliveryAddress().getPostcode());
+                    ps.setString(16, customer.getDeliveryAddress().getStreet());
+                    ps.setString(17, customer.getDeliveryAddress().getStreet());
+
                 }
 //                logger.info("PREPARED STATEMENT" + ps.toString());
 
@@ -90,21 +111,15 @@ public class CustomerService implements CustomerServiceInterface, PreparedStatem
 
     @Override
     public String deleteCustomer(int customerId) throws SQLException {
-        String query = "DELETE FROM  CUSTOMERS WHERE CUSTOMERNO =?";
+        String query = "DELETE FROM CUSTOMERS WHERE CUSTOMERNO = ?";
         customerRepository = new CustomerRepository(query);
-        Boolean deleted = db.execute(con -> con.prepareStatement(query), (PreparedStatementCallback<Boolean>) ps -> {
+        return db.execute(con -> con.prepareStatement(query), (PreparedStatementCallback<String>) ps -> {
             ps.setInt(1, customerId);
-                logger.info(ps.toString());
-            return ps.execute();
-        });
-        if(deleted){
+//                logger.info(ps.toString());
+              ps.execute();
             customerHashMap.remove(customerId);
             return "customer " + customerId +" deleted successfully";
-        }else{
-            return "customer " + customerId +" does not exist";
-        }
-
-
+        });
 
     }
 
