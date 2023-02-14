@@ -127,12 +127,6 @@ public class CustomerService implements CustomerServiceInterface, PreparedStatem
     public Collection<Customer> findCustomer(int customerId) {
         Customer[] tempCustomer = {null};
         HashMap<Integer,Customer > temp = new HashMap<>();
-//        customerHashMap.forEach((count, element)->{
-//            if(count == customerId){
-//                tempCustomer[0] = customerHashMap.get(customerId);
-//                temp.put(customerId,tempCustomer[0]);
-//            }
-//        });
 
        Customer customer = db.execute((PreparedStatementCreator) con -> con.prepareStatement("SELECT * FROM CUSTOMERS WHERE CUSTOMERNO =? ")
                , (PreparedStatementCallback<Customer>) ps -> {
@@ -145,6 +139,24 @@ public class CustomerService implements CustomerServiceInterface, PreparedStatem
                        customer1.setDeliveryAddress(new Address(rs.getString("DELIVERYADDRESS"),"",""));
                        customer1.setTelephoneNumber(rs.getString("TELEPHONE"));
                        customer1.setCompanyName(rs.getString("FNAME"));
+
+
+                       String accountNo = rs.getString("ACCOUNTNO");
+                       double accountBal = rs.getDouble("ACCOUNTBAL");
+                       String billingPostcode = rs.getString("BILLING_POSTCODE");
+                       String billingTown = rs.getString("BILLING_TOWN");
+                       String billingStreet = rs.getString("BILLING_STREET");
+                       String deliveryStreet = rs.getString("DELIVERY_STREET");
+                       String deliveryTown = rs.getString("DELIVERY_TOWN");
+                       String deliveryPostcode = rs.getString("DELIVERY_POSTCODE");
+
+                       Address deliveryAddress = new Address(deliveryPostcode,deliveryTown,deliveryStreet);
+                       Address billingAddress = new Address(billingPostcode,billingTown,billingStreet);
+                       Account account = new Account(accountNo, accountBal);
+
+                       customer1.setAccount(account);
+                       customer1.setDeliveryAddress(deliveryAddress);
+                       customer1.setBillingAddress(billingAddress);
                    }
                    return customer1;
                });
@@ -184,10 +196,26 @@ public class CustomerService implements CustomerServiceInterface, PreparedStatem
                    customer = new PrivateCustomer();
               }
               customer.setCustomerNumber(rs.getInt("CUSTOMERNO"));
-              customer.setAccount(new Account(rs.getString("ACCTNO"),0));
-              customer.setDeliveryAddress(new Address(rs.getString("DELIVERYADDRESS"),"",""));
+//              customer.setAccount(new Account(rs.getString("ACCTNO"),0));
+//              customer.setDeliveryAddress(new Address(rs.getString("DELIVERYADDRESS"),"",""));
               customer.setTelephoneNumber(rs.getString("TELEPHONE"));
-//                    customer.(rs.getString("TELEPHONE"));
+
+              String accountNo = rs.getString("ACCOUNTNO");
+              double accountBal = rs.getDouble("ACCOUNTBAL");
+              String billingPostcode = rs.getString("BILLING_POSTCODE");
+              String billingTown = rs.getString("BILLING_TOWN");
+              String billingStreet = rs.getString("BILLING_STREET");
+              String deliveryStreet = rs.getString("DELIVERY_STREET");
+              String deliveryTown = rs.getString("DELIVERY_TOWN");
+              String deliveryPostcode = rs.getString("DELIVERY_POSTCODE");
+
+              Address deliveryAddress = new Address(deliveryPostcode,deliveryTown,deliveryStreet);
+              Address billingAddress = new Address(billingPostcode,billingTown,billingStreet);
+              Account account = new Account(accountNo, accountBal);
+
+              customer.setAccount(account);
+              customer.setDeliveryAddress(deliveryAddress);
+              customer.setBillingAddress(billingAddress);
 
                     if (customer instanceof BusinessCustomer) {
                         ((BusinessCustomer) customer).setCompanyName(rs.getString("CUSTOMERNAME"));

@@ -1,0 +1,143 @@
+-- MySQL dump 10.13  Distrib 8.0.31, for Linux (x86_64)
+--
+-- Host: localhost    Database: OMS
+-- ------------------------------------------------------
+-- Server version	8.0.31
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `CUSTOMERS`
+--
+
+DROP TABLE IF EXISTS `CUSTOMERS`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `CUSTOMERS` (
+  `ID` int NOT NULL AUTO_INCREMENT,
+  `CUSTOMERNO` varchar(100) NOT NULL,
+  `ACCTNO` varchar(100) DEFAULT NULL,
+  `DELIVERYADDRESS` varchar(255) DEFAULT NULL,
+  `BILLINGADDRESS` varchar(255) DEFAULT NULL,
+  `TELEPHONE` varchar(20) DEFAULT NULL,
+  `CUSTOMERTYPE` varchar(2) DEFAULT NULL,
+  `CUSTOMERNAME` varchar(255) DEFAULT NULL,
+  `FNAME` varchar(255) DEFAULT NULL,
+  `LNAME` varchar(255) DEFAULT NULL,
+  `ACCOUNTNO` varchar(50) DEFAULT NULL,
+  `ACCOUNTBAL` double DEFAULT NULL,
+  `BILLING_POSTCODE` varchar(40) DEFAULT NULL,
+  `BILLING_TOWN` varchar(40) DEFAULT NULL,
+  `BILLING_STREET` varchar(255) DEFAULT NULL,
+  `DELIVERY_POSTCODE` varchar(40) DEFAULT NULL,
+  `DELIVERY_TOWN` varchar(40) DEFAULT NULL,
+  `DELIVERY_STREET` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`ID`,`CUSTOMERNO`)
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `CUSTOMERS`
+--
+
+LOCK TABLES `CUSTOMERS` WRITE;
+/*!40000 ALTER TABLE `CUSTOMERS` DISABLE KEYS */;
+INSERT INTO `CUSTOMERS` VALUES (38,'2','3904059/AC','10104','10104','0703828949','P','VictorGachau','Victor','Gachau','3904059/AC',90000,'10104','Kiambu road','Kiambu road','10104','Kiambu road','Kiambu road'),(39,'9','3904059/AC','10104','10104','0703828949','B','Victor',NULL,NULL,'3904059/AC',90000,'10104','Kiambu road','Kiambu road','10104','Kiambu road','Kiambu road');
+/*!40000 ALTER TABLE `CUSTOMERS` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ITEMS`
+--
+
+DROP TABLE IF EXISTS `ITEMS`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `ITEMS` (
+  `ID` int NOT NULL AUTO_INCREMENT,
+  `ITEMNO` varchar(20) NOT NULL,
+  `ITEMNAME` varchar(255) DEFAULT NULL,
+  `QUANTITY` int DEFAULT NULL,
+  `PRICE` double(15,2) DEFAULT NULL,
+  PRIMARY KEY (`ID`,`ITEMNO`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ITEMS`
+--
+
+LOCK TABLES `ITEMS` WRITE;
+/*!40000 ALTER TABLE `ITEMS` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ITEMS` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ORDERITEMS`
+--
+
+DROP TABLE IF EXISTS `ORDERITEMS`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `ORDERITEMS` (
+  `ID` int NOT NULL AUTO_INCREMENT,
+  `ITEMORDERNO` int NOT NULL,
+  `QUANTITY` int DEFAULT NULL,
+  `ITEMNO` varchar(20) NOT NULL,
+  PRIMARY KEY (`ID`,`ITEMORDERNO`,`ITEMNO`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ORDERITEMS`
+--
+
+LOCK TABLES `ORDERITEMS` WRITE;
+/*!40000 ALTER TABLE `ORDERITEMS` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ORDERITEMS` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ORDERS`
+--
+
+DROP TABLE IF EXISTS `ORDERS`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `ORDERS` (
+  `ID` int NOT NULL AUTO_INCREMENT,
+  `ORDERNO` int NOT NULL,
+  `CUSTOMERNO` int NOT NULL,
+  `ORDERDATE` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`ID`,`ORDERNO`,`CUSTOMERNO`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ORDERS`
+--
+
+LOCK TABLES `ORDERS` WRITE;
+/*!40000 ALTER TABLE `ORDERS` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ORDERS` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2023-02-14  9:11:17
