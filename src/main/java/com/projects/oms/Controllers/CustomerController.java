@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.projects.oms.models.Address;
 import com.projects.oms.models.Customer;
 import com.projects.oms.models.JSONResponse;
-import com.projects.oms.repositories.CustomerRepository;
 import com.projects.oms.services.CustomerService;
 //import jakarta.annotation.Resource;
 import org.slf4j.Logger;
@@ -18,10 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Optional;
+import java.util.*;
 
 @ControllerAdvice
 @RestController
@@ -33,36 +29,41 @@ public class CustomerController {
     @Autowired
     CustomerService customerService;
 
+
+    // replace this with record java 17
     private final JSONResponse jsonResponse = new JSONResponse();
+
+    record SuccessResponse(String status){
+    }
 
 
 
     @RequestMapping(path = "/newcustomer", method = RequestMethod.POST)
 
-    public ResponseEntity<JSONResponse> createNewCustomer(@RequestBody ArrayList<Customer> customerList){
+    public SuccessResponse createNewCustomer(@RequestBody ArrayList<Customer> customerList){
 
         customerService.createNewCustomer(customerList);
         jsonResponse.setMessage("Customer added succesfully");
         jsonResponse.setStatus(HttpStatus.CREATED.toString());
-        return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
+        return new SuccessResponse("success");
     }
     @RequestMapping(path="/allcustomers", method = RequestMethod.GET)
     public ResponseEntity<Collection<Customer>> getAllCustomers(@RequestParam(value = "customerId", required = false) Optional<Integer> customerid){
-        if(!customerid.isPresent()){
-            return new ResponseEntity<>(customerService.getAllCustomers(), HttpStatus.OK);
-        }else{
-            return new ResponseEntity<>(customerService.findCustomer(customerid.get()), HttpStatus.OK);
-        }
-
+        return customerid
+                .map(i -> new ResponseEntity<>(customerService.findCustomer(i), HttpStatus.OK))
+                .orElseGet(() ->new ResponseEntity<>(customerService.getAllCustomers(), HttpStatus.OK));
     }
 
     @RequestMapping(path = "/customer/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<JSONResponse> deleteCustomer(@PathVariable ("id") int customerid) throws SQLException {
+    public ResponseEntity<SuccessResponse> deleteCustomer(@PathVariable ("id") Optional <Integer> customerid) throws SQLException {
+        return customerid.map((x)->{
+            try {
+                return new ResponseEntity<>(new SuccessResponse(customerService.deleteCustomer(x)), HttpStatus.OK );
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }).orElseThrow(()->new RuntimeException("Missing customerid"));
 
-   String message= customerService.deleteCustomer(customerid);
-        jsonResponse.setStatus(HttpStatus.OK.toString());
-        jsonResponse.setMessage(message);
-        return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
     }
 
     public  static void testJacksonLibrary(){

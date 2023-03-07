@@ -8,8 +8,10 @@ package com.projects.oms.models;
 /**
  *
  */
-import java.text.SimpleDateFormat;
+import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
+@Component
 public class Date {
 
     private int day;
