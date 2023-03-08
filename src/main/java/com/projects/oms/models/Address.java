@@ -5,51 +5,23 @@
  */
 package com.projects.oms.models;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
+
 /**
  *
  */
+@Component
+@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Address {
     private String postcode;
     private String town;
     private String street;
-
-    public Address(String postcode, String town, String street) {
-        this.postcode = postcode;
-        this.town = town;
-        this.street = street;
-    }
-
-    public Address() {
-    }
-
-    public String getPostcode() {
-        return postcode;
-    }
-
-    public void setPostcode(String postcode) {
-        this.postcode = postcode;
-    }
-
-    public String getTown() {
-        return town;
-    }
-
-    public void setTown(String town) {
-        this.town = town;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    @Override
-    public String toString() {
-        return "Address{" + "postcode=" + postcode + ", town=" + town + ", street=" + street + '}';
-    }
-    
     
 }

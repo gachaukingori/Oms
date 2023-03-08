@@ -8,10 +8,18 @@ package com.projects.oms.models;
 /**
  *
  */
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
 @Component
+@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Date {
 
     private int day;
@@ -19,9 +27,7 @@ public class Date {
     private int year;
     private String dateString;
 
-    public Date() {
-        this.dateString = "01.01.1900";
-    }
+
 
     public Date(int day, int month, int year) {
         if (month >= 1 && month <= 12) {

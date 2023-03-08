@@ -7,11 +7,16 @@ package com.projects.oms.models;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import lombok.*;
 
 /**
  *
  */
-
+@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
@@ -21,9 +26,6 @@ public class PrivateCustomer extends Customer {
     private String firstName;
     private String lastName;
 
-
-    public PrivateCustomer() {
-    }
 
     public PrivateCustomer(String firstName, String lastName, Account account, Address deliveryAddress, int customerNumber, String telephoneNumber) {
         super(account, deliveryAddress, customerNumber,telephoneNumber );
@@ -55,7 +57,6 @@ public class PrivateCustomer extends Customer {
 
     @Override
     public String getName() {
-        
         return firstName.concat(lastName);
     }
     

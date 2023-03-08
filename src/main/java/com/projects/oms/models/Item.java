@@ -5,9 +5,18 @@
  */
 package com.projects.oms.models;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  *
  */
+@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Item {
     
     private static final double DEFAULT_PERCENTAGE_PROFIT = 10;
@@ -16,51 +25,6 @@ public class Item {
     private double purchasePrice;
     private int itemQuantity;
 
-
-
-    public Item() {
-    }
-
-    public Item(int itemNumber, String itemDesc, double purchasePrice, int itemQuantity) {
-        this.itemNumber = itemNumber;
-        this.itemDesc = itemDesc;
-        this.purchasePrice = purchasePrice;
-        this.itemQuantity = itemQuantity;
-    }
-
-    public int getItemQuantity() {
-        return itemQuantity;
-    }
-
-    public void setItemQuantity(int itemQuantity) {
-        this.itemQuantity = itemQuantity;
-    }
-
-    public int getItemNumber() {
-        return itemNumber;
-    }
-
-    public void setItemNumber(int itemNumber) {
-        this.itemNumber = itemNumber;
-    }
-
-    public String getItemDesc() {
-        return itemDesc;
-    }
-
-    public void setItemDesc(String itemDesc) {
-        this.itemDesc = itemDesc;
-    }
-
-    public double getPurchasePrice() {
-        return purchasePrice;
-    }
-
-    public void setPurchasePrice(double purchasePrice) {
-        this.purchasePrice = purchasePrice;
-    }
-    
-    
     /**
     
     @return  sales price to be 10% more than the purchasing price
@@ -73,13 +37,4 @@ public class Item {
 
     }
 
-    @Override
-    public String toString() {
-        return "Item{" +
-                "itemNumber=" + itemNumber +
-                ", itemDesc='" + itemDesc + '\'' +
-                ", purchasePrice=" + purchasePrice +
-                ", itemQuantity=" + itemQuantity +
-                '}';
-    }
 }

@@ -8,6 +8,7 @@ package com.projects.oms.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import lombok.*;
 
 import java.util.ArrayList;
 
@@ -15,13 +16,12 @@ import java.util.ArrayList;
  *
  * @author victor
  */
+@Builder
+@Data
+//@NoArgsConstructor
+@AllArgsConstructor
+
 @JsonIgnoreProperties(ignoreUnknown = true)
-//@JsonTypeInfo(use=JsonTypeInfo.Id.CLASS, include=JsonTypeInfo.As.PROPERTY, property="@type")
-//@JsonSubTypes({
-//        @JsonSubTypes.Type(value = BusinessCustomer.class, name = "BusinessCustomer"),
-//
-//        @JsonSubTypes.Type(value = PrivateCustomer.class, name = "PrivateCustomer") }
-//)
 
 
 
@@ -66,53 +66,6 @@ public abstract class Customer {
     
     
 
-    public Account getAccount() {
-        return account;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
-    }
-
-    public Address getDeliveryAddress() {
-        return deliveryAddress;
-    }
-
-    public void setDeliveryAddress(Address deliveryAddress) {
-        this.deliveryAddress = deliveryAddress;
-    }
-
-    public Address getBillingAddress() {
-        return billingAddress;
-    }
-
-    public void setBillingAddress(Address billingAddress) {
-        this.billingAddress = billingAddress;
-    }
-
-    public int getCustomerNumber() {
-        return customerNumber;
-    }
-
-    public void setCustomerNumber(int customerNumber) {
-        this.customerNumber = customerNumber;
-    }
-
-    public String getTelephoneNumber() {
-        return telephoneNumber;
-    }
-
-    public void setTelephoneNumber(String telephoneNumber) {
-        this.telephoneNumber = telephoneNumber;
-    }
-
-
-    public void setOrders(ArrayList<Order> orders) {
-        this.orders = orders;
-    }
-    
-    
-    
     public abstract String getName();
 
     @Override
@@ -120,7 +73,4 @@ public abstract class Customer {
         return "Customer{" + "account=" + account + ", deliveryAddress=" + deliveryAddress + ", billingAddress=" + billingAddress + ", customerNumber=" + customerNumber + ", telephoneNumber=" + telephoneNumber + '}';
     }
 
-   
-    
-    
 }

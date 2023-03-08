@@ -6,56 +6,23 @@
 package com.projects.oms.models;
 
 
+import lombok.*;
+import org.springframework.stereotype.Component;
+
+import java.beans.ConstructorProperties;
+
 /**
  *
  */
+@Component
+@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@RequiredArgsConstructor(onConstructor_=@ConstructorProperties({"accountno","accountbal"}))
 public class Account {
     public static final double DEFAULT_ACCOUNT_BALANCE = 10;
-    
     private String accountno ;
     private double accountbal;
     private Customer customer;
-
-    
-
-    public Account(String accountno, double accountbal) {
-        this.accountno = accountno;
-        setAccountbal(accountbal);
-    }
-    
-
-    public String getAccountno() {
-        return accountno;
-    }
-
-    public void setAccountno(String accountno) {
-        this.accountno = accountno;
-    }
-
-    public double getAccountbal() {
-        return accountbal;
-    }
-
-    public void setAccountbal(double accountbal) {
-        if(accountbal < 10){
-            accountbal = DEFAULT_ACCOUNT_BALANCE;
-        }
-        this.accountbal = accountbal;
-    }
-
-//    public Customer getCustomer() {
-//        return customer;
-//    }
-
-//    public void setCustomer(Customer customer) {
-//        this.customer = customer;
-//    }
-
-    @Override
-    public String toString() {
-        return "Account{" + "accountno=" + accountno + ", accountbal=" + accountbal + ", customer=" + customer + '}';
-    }
-    
-    
-    
 }

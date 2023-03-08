@@ -56,7 +56,8 @@ public class CustomerController {
 
     @RequestMapping(path = "/customer/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<SuccessResponse> deleteCustomer(@PathVariable ("id") int customerid) throws SQLException {
-                return new ResponseEntity<>(new SuccessResponse(customerService.deleteCustomer(customerid)), HttpStatus.OK );
+        customerService.deleteCustomer(customerid);
+        return new ResponseEntity<>(HttpStatus.OK );
     }
 
     public  static void testJacksonLibrary(){
