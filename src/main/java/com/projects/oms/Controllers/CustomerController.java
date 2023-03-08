@@ -55,15 +55,8 @@ public class CustomerController {
     }
 
     @RequestMapping(path = "/customer/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<SuccessResponse> deleteCustomer(@PathVariable ("id") Optional <Integer> customerid) throws SQLException {
-        return customerid.map((x)->{
-            try {
-                return new ResponseEntity<>(new SuccessResponse(customerService.deleteCustomer(x)), HttpStatus.OK );
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }).orElseThrow(()->new RuntimeException("Missing customerid"));
-
+    public ResponseEntity<SuccessResponse> deleteCustomer(@PathVariable ("id") int customerid) throws SQLException {
+                return new ResponseEntity<>(new SuccessResponse(customerService.deleteCustomer(customerid)), HttpStatus.OK );
     }
 
     public  static void testJacksonLibrary(){
