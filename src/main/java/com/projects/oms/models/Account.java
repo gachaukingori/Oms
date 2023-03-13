@@ -19,10 +19,10 @@ import java.beans.ConstructorProperties;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@RequiredArgsConstructor(onConstructor_=@ConstructorProperties({"accountno","accountbal"}))
+//@RequiredArgsConstructor(onConstructor_=@ConstructorProperties({"accountno","accountbal"}))
 public class Account {
     public static final double DEFAULT_ACCOUNT_BALANCE = 10;
-    private String accountno ;
+    private  String accountno ;
     private double accountbal;
     private Customer customer;
 }

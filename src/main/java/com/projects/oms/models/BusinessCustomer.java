@@ -13,7 +13,7 @@ import lombok.*;
 /**
  *
  */
-@Builder
+//@Builder
 @Data
 //@NoArgsConstructor
 @AllArgsConstructor

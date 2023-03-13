@@ -16,7 +16,7 @@ import java.util.ArrayList;
  *
  * @author victor
  */
-@Builder
+//@Builder
 @Data
 //@NoArgsConstructor
 @AllArgsConstructor

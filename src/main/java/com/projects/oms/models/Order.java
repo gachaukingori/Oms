@@ -20,7 +20,7 @@ import java.util.Iterator;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@RequiredArgsConstructor(onConstructor_ = @ConstructorProperties({"orderNumber", "customerid", "orderItems"}))
+//@RequiredArgsConstructor(onConstructor_ = @ConstructorProperties({"orderNumber", "customerid", "orderItems"}))
 public class Order {
     public static final int DEFAULT_ODRDER_NUMBER = 1;
 

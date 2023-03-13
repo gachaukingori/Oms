@@ -34,50 +34,20 @@ public class CustomerService implements CustomerServiceInterface {
     @Override
     public void deleteCustomer(int customerId) throws SQLException {
         customerHashMap.remove(customerId);
-
-
     }
 
     @Override
     public Collection<Customer> findCustomer(int customerId) {
-        Customer[] tempCustomer = {null};
         HashMap<Integer,Customer > temp = new HashMap<>();
+        Customer tempCustomer = customerHashMap.entrySet()
+                .stream()
+                .filter((customer) -> customerId == customer.getValue().getCustomerNumber())
+                .findFirst()
+                .orElseThrow(()->new RuntimeException("Customer not Found"))
+                .getValue();
 
-       Customer customer = db.execute((PreparedStatementCreator) con -> con.prepareStatement("SELECT * FROM CUSTOMERS WHERE CUSTOMERNO =? ")
-               , (PreparedStatementCallback<Customer>) ps -> {
-                   ps.setInt(1, customerId);
-                   ResultSet rs = ps.executeQuery();
-                   BusinessCustomer customer1 = new BusinessCustomer();
-                   if(rs.next()){
-                       customer1.setCustomerNumber(rs.getInt("CUSTOMERNO"));
-                       customer1.setAccount(new Account(rs.getString("ACCTNO"),0));
-                       customer1.setDeliveryAddress(new Address(rs.getString("DELIVERYADDRESS"),"",""));
-                       customer1.setTelephoneNumber(rs.getString("TELEPHONE"));
-                       customer1.setCompanyName(rs.getString("FNAME"));
-
-
-                       String accountNo = rs.getString("ACCOUNTNO");
-                       double accountBal = rs.getDouble("ACCOUNTBAL");
-                       String billingPostcode = rs.getString("BILLING_POSTCODE");
-                       String billingTown = rs.getString("BILLING_TOWN");
-                       String billingStreet = rs.getString("BILLING_STREET");
-                       String deliveryStreet = rs.getString("DELIVERY_STREET");
-                       String deliveryTown = rs.getString("DELIVERY_TOWN");
-                       String deliveryPostcode = rs.getString("DELIVERY_POSTCODE");
-
-                       Address deliveryAddress = new Address(deliveryPostcode,deliveryTown,deliveryStreet);
-                       Address billingAddress = new Address(billingPostcode,billingTown,billingStreet);
-                       Account account = new Account(accountNo, accountBal);
-
-                       customer1.setAccount(account);
-                       customer1.setDeliveryAddress(deliveryAddress);
-                       customer1.setBillingAddress(billingAddress);
-                   }
-                   return customer1;
-               });
-            temp.put(1,customer);
-
-        return temp.values();
+          temp.put(customerId,tempCustomer);
+          return temp.values();
     }
 
     @Override
