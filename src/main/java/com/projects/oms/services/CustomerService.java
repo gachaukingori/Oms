@@ -16,19 +16,18 @@ import java.util.HashMap;
 
 @Service
 public class CustomerService implements CustomerServiceInterface {
-   static HashMap<Integer, Customer> customerHashMap = new HashMap();
-    private CustomerRepository customerRepository;
-    String query;
+   static HashMap<Integer, Customer> customerHashMap = new HashMap<>();
+    @Autowired
+    private  CustomerRepository customerRepository;
 
-   @Autowired
-   JdbcTemplate db;
     public static final org.slf4j.Logger logger =
             LoggerFactory.getLogger(CustomerController.class);
 
 
     @Override
     public void createNewCustomer(ArrayList<Customer> customerList) {
-        customerList.forEach((customer)-> customerHashMap.put(customer.getCustomerNumber(), customer));
+        customerRepository.saveAll(customerList);
+//        customerList.forEach((customer)-> customerHashMap.put(customer.getCustomerNumber(), customer));
     }
 
     @Override

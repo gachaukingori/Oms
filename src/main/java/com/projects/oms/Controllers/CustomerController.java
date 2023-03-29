@@ -60,45 +60,45 @@ public class CustomerController {
         return new ResponseEntity<>(HttpStatus.OK );
     }
 
-    public  static void testJacksonLibrary(){
-        ObjectMapper objectMapper = new ObjectMapper();
-        String addressJson = "{\n" +
-                "      \"postcode\":\"10104\",\n" +
-                "      \"town\":\"Mweiga\",\n" +
-                "      \"street\":\"Kiambu road\"\n" +
-                "  }";
-        try {
-            Address address = objectMapper.readValue(addressJson, Address.class);
-            logger.info("the address object from json is"+ address);
-            Address address1 = new Address("0200","Nanyuki", "Ngobit");
-            String jsonObject = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(address1);
-            logger.info("the json object from address object is"+ jsonObject);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    public  static void testJacksonLibrary(){
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        String addressJson = "{\n" +
+//                "      \"postcode\":\"10104\",\n" +
+//                "      \"town\":\"Mweiga\",\n" +
+//                "      \"street\":\"Kiambu road\"\n" +
+//                "  }";
+//        try {
+//            Address address = objectMapper.readValue(addressJson, Address.class);
+//            logger.info("the address object from json is"+ address);
+//            Address address1 = new Address("0200","Nanyuki", "Ngobit");
+//            String jsonObject = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(address1);
+//            logger.info("the json object from address object is"+ jsonObject);
+//        } catch (JsonProcessingException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
-    public static  void testJsonFile(){
-
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            Address address = objectMapper.readValue(new File("/home/victor/JAVA/SPRINGBOOT/oms/src/main/resources/static/customer.json"), Address.class);
-            String jsonString = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(address);
-
-            HashMap<String, Object> hashMap = new HashMap<>();
-            Address address1 = objectMapper.readValue(jsonString, Address.class);
-            hashMap.put("address",address1.getTown());
-            hashMap.put("street",address1.getStreet());
-
-
-
-            objectMapper.writeValue(new File("/home/victor/JAVA/SPRINGBOOT/oms/src/main/resources/static/address.json"),hashMap);
-
-            logger.info("customer file "+jsonString);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    public static  void testJsonFile(){
+//
+//        try {
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            Address address = objectMapper.readValue(new File("/home/victor/JAVA/SPRINGBOOT/oms/src/main/resources/static/customer.json"), Address.class);
+//            String jsonString = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(address);
+//
+//            HashMap<String, Object> hashMap = new HashMap<>();
+//            Address address1 = objectMapper.readValue(jsonString, Address.class);
+//            hashMap.put("address",address1.getTown());
+//            hashMap.put("street",address1.getStreet());
+//
+//
+//
+//            objectMapper.writeValue(new File("/home/victor/JAVA/SPRINGBOOT/oms/src/main/resources/static/address.json"),hashMap);
+//
+//            logger.info("customer file "+jsonString);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
 
 

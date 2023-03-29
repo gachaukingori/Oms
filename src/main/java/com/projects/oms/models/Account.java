@@ -6,6 +6,7 @@
 package com.projects.oms.models;
 
 
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.stereotype.Component;
 
@@ -20,9 +21,16 @@ import java.beans.ConstructorProperties;
 @NoArgsConstructor
 @AllArgsConstructor
 //@RequiredArgsConstructor(onConstructor_=@ConstructorProperties({"accountno","accountbal"}))
+@Entity
+@Table(name="accounts")
 public class Account {
-    public static final double DEFAULT_ACCOUNT_BALANCE = 10;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO )
+    private Integer id;
+//    public static final double DEFAULT_ACCOUNT_BALANCE = 10;
     private  String accountno ;
     private double accountbal;
-    private Customer customer;
+
+//    @OneToOne(mappedBy = "accounts")
+//    private Customer customer;
 }

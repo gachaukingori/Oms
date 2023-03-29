@@ -8,6 +8,7 @@ package com.projects.oms.models;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.persistence.*;
 import lombok.*;
 
 /**
@@ -15,7 +16,7 @@ import lombok.*;
  */
 //@Builder
 @Data
-//@NoArgsConstructor
+@NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @JsonTypeInfo(
@@ -24,10 +25,14 @@ import lombok.*;
         property = "type")
 @JsonTypeName("BusinessCustomer")
 
-public class  BusinessCustomer  extends Customer{
-    public BusinessCustomer() {
-    }
+@Entity
+@DiscriminatorValue("BUSINESS_CUSTOMER")
+public class  BusinessCustomer  extends Customer {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO )
+    private  Integer id;
 
+    @Column(name = "company_name")
     private String companyName;
 
     public BusinessCustomer(String companyName, Account account, Address deliveryAddress, int customerNumber, String telephoneNumber) {
@@ -40,13 +45,6 @@ public class  BusinessCustomer  extends Customer{
         this.companyName = companyName;
     }
 
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
 
     
     @Override
@@ -54,10 +52,6 @@ public class  BusinessCustomer  extends Customer{
         return companyName;
     }
 
-    @Override
-    public String toString() {
-        return "BusinessCustomer{" + "companyName=" + companyName + ", Name=" +getName() + ", Address="+getBillingAddress()+ '}';
-    }
-    
+
    
 }

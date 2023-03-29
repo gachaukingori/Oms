@@ -5,21 +5,29 @@
  */
 package com.projects.oms.models;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 /**
  *
  */
+@Component
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name="ITEMS")
 public class Item {
     
     private static final double DEFAULT_PERCENTAGE_PROFIT = 10;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
     private int itemNumber;
     private String itemDesc;
     private double purchasePrice;
@@ -31,10 +39,7 @@ public class Item {
     */
     public double salesPrice(){
         double profit = DEFAULT_PERCENTAGE_PROFIT/100 * purchasePrice;
-       double salesPrice =  purchasePrice + profit  ;
-        return salesPrice;
-
-
+        return purchasePrice + profit;
     }
 
 }

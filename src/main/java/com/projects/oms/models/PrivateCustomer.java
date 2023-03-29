@@ -7,6 +7,7 @@ package com.projects.oms.models;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.persistence.*;
 import lombok.*;
 
 /**
@@ -16,14 +17,24 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+//@EqualsAndHashCode(callSuper = true)
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
         property = "type")
 @JsonTypeName("PrivateCustomer")
-public class PrivateCustomer extends Customer {
+
+@Entity
+@DiscriminatorValue("PRIVATE_CUSTOMER")
+public class PrivateCustomer extends Customer  {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO )
+    private  Integer id;
+
+    @Column(name = "first_name")
     private String firstName;
+
+    @Column(name = "last_name")
     private String lastName;
 
 
@@ -39,21 +50,6 @@ public class PrivateCustomer extends Customer {
         this.lastName = lastName;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
 
     @Override
     public String getName() {

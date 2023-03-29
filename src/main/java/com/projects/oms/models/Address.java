@@ -5,6 +5,7 @@
  */
 package com.projects.oms.models;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +20,14 @@ import org.springframework.stereotype.Component;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+
+@Entity
+@Table(name="ADDRESSES")
 public class Address {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO )
+//    @Column(name="Address_id")
+    private  Integer id;
     private String postcode;
     private String town;
     private String street;

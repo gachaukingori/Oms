@@ -1,37 +1,21 @@
 package com.projects.oms;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.web.WebAppConfiguration;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-
+//@WebAppConfiguration
+@ContextConfiguration
 
 @SpringBootTest
+
+
 class OmsApplicationTests {
 
-	Calculator firstTest = new Calculator();
 	@Test
-	 void shouldAddTwNumbers(){
-	// Given
-		int num1 = 20;
-		int num2 = 30;
-
-		// when
-		int result = firstTest.addTwoNumbers(num1, num2);
-		//Then
-		int expected = 50;
-		assertThat(result).isEqualTo(expected);
+	void contextLoads() {
 	}
-	class Calculator{
-
-		int addTwoNumbers(int a, int b){
-			return  a+b;
-		}
-	}
-
-
-
 
 }
+

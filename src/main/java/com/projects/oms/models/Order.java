@@ -6,7 +6,9 @@
 package com.projects.oms.models;
 
 import com.projects.oms.services.OrderItemService;
+import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.stereotype.Component;
 
 import java.beans.ConstructorProperties;
 import java.util.ArrayList;
@@ -21,35 +23,46 @@ import java.util.Iterator;
 @NoArgsConstructor
 @AllArgsConstructor
 //@RequiredArgsConstructor(onConstructor_ = @ConstructorProperties({"orderNumber", "customerid", "orderItems"}))
-public class Order {
-    public static final int DEFAULT_ODRDER_NUMBER = 1;
+@Component
+@Entity
+@Table(name="ORDERS")
 
-    private  static final Item DEFAULT_ITEM = null;
-    private static final OrderItem DEFAULT_ORDER_ITEM = null;
+public class Order {
+//    public static final int DEFAULT_ODRDER_NUMBER = 1;
+//
+//    private  static final Item DEFAULT_ITEM = null;
+//    private static final OrderItem DEFAULT_ORDER_ITEM = null;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO )
+    private  Integer id;
+
     private int orderNumber;
-    private Date orderDate;
-    private Customer customer;
+//    private Date orderDate;
+//    @ManyToOne
+//    private Customer customer;
+
     private int customerid;
 
-
-    private ArrayList <Integer> orderItems;
+    @OneToMany
+    private ArrayList <OrderItem> orderItems;
 
      public double getTotalOrderValue(){
-         Iterator<Integer> iterator = orderItems.iterator();
+         Iterator<OrderItem> iterator = orderItems.iterator();
         double total = 0;
          while(iterator.hasNext()){
-             Integer  orderNumber = iterator.next();
+             Integer  orderNumber = iterator.next().getOrderNumber();
              OrderItem item = OrderItemService.orderItemHashMap.get(orderNumber);
              total += (item.calculateItemPrice() * item.getOrderQuantity());
          }
          return total ;
     }
      public double getTotalProfit(){
-         Iterator<Integer> iterator = orderItems.iterator();
+         Iterator<OrderItem> iterator = orderItems.iterator();
         double total = 0;
          while(iterator.hasNext()){
 
-             Integer  orderNumber = iterator.next();
+             Integer  orderNumber = iterator.next().getOrderNumber();
              OrderItem item = OrderItemService.orderItemHashMap.get(orderNumber);
              total += item.calculateProfit();
          }
