@@ -10,8 +10,4 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Integer>  {
-
-
-
-
 }

@@ -1,10 +1,12 @@
 package com.projects.oms.services;
 
 import com.projects.oms.Controllers.CustomerController;
+import com.projects.oms.exceptions.NotFoundException;
 import com.projects.oms.models.*;
 import com.projects.oms.repositories.CustomerRepository;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.*;
 import org.springframework.stereotype.Service;
 
@@ -25,8 +27,8 @@ public class CustomerService implements CustomerServiceInterface {
 
 
     @Override
-    public void createNewCustomer(ArrayList<Customer> customerList) {
-        customerRepository.saveAll(customerList);
+    public void createNewCustomer(Customer customer) {
+        customerRepository.save(customer);
 //        customerList.forEach((customer)-> customerHashMap.put(customer.getCustomerNumber(), customer));
     }
 
@@ -35,28 +37,25 @@ public class CustomerService implements CustomerServiceInterface {
         customerHashMap.remove(customerId);
     }
 
-    @Override
-    public Collection<Customer> findCustomer(int customerId) {
-        HashMap<Integer,Customer > temp = new HashMap<>();
-        Customer tempCustomer = customerHashMap.entrySet()
-                .stream()
-                .filter((customer) -> customerId == customer.getValue().getCustomerNumber())
-                .findFirst()
-                .orElseThrow(()->new RuntimeException("Customer not Found"))
-                .getValue();
 
-          temp.put(customerId,tempCustomer);
-          return temp.values();
+    public Customer findCustomer(int customerId) {
+    return customerRepository.findById(customerId).orElseThrow(()->new NotFoundException("Customer not found"));
     }
 
     @Override
     public Collection<Customer> getAllCustomers() {
-        return customerHashMap.values();
+        return customerRepository.findAll();
     }
 
     @Override
     public void updateCustomer(int customerId, Customer customer) {
-
+     customerRepository.findById(customerId).ifPresentOrElse((
+             customer1 -> {
+              customer1.setBillingAddress(customer.getBillingAddress());
+              customer1.setAccount(customer.getAccount());
+              customer1.setTelephoneNumber(customer.getTelephoneNumber());
+              customerRepository.save(customer1);
+             }),() -> customerRepository.save(customer));
     }
 
 

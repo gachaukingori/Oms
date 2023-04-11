@@ -40,20 +40,28 @@ public class CustomerController {
 
     @RequestMapping(path = "/newcustomer", method = RequestMethod.POST)
 
-    public SuccessResponse createNewCustomer(@RequestBody ArrayList<Customer> customerList){
-
-        customerService.createNewCustomer(customerList);
+    public SuccessResponse createNewCustomer(@RequestBody Customer customer){
+        customerService.createNewCustomer(customer);
         jsonResponse.setMessage("Customer added succesfully");
         jsonResponse.setStatus(HttpStatus.CREATED.toString());
         return new SuccessResponse("success");
     }
     @RequestMapping(path="/allcustomers", method = RequestMethod.GET)
-    public ResponseEntity<Collection<Customer>> getAllCustomers(@RequestParam(value = "customerId", required = false) Optional<Integer> customerid){
-        return customerid
-                .map(i -> new ResponseEntity<>(customerService.findCustomer(i), HttpStatus.OK))
-                .orElseGet(() ->new ResponseEntity<>(customerService.getAllCustomers(), HttpStatus.OK));
+    public ResponseEntity<Collection<Customer>> getAllCustomers(){
+        return new ResponseEntity<>(customerService.getAllCustomers(), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/updatecustomer/{customerId}", method = RequestMethod.POST)
+    public SuccessResponse updateCustomerIfExists(@PathVariable("customerId") int customerId,
+                                                  Customer customer){
+        customerService.updateCustomer(customerId,customer);
+        return new SuccessResponse("success");
+    }
+
+    @GetMapping(path = "/customer")
+    public ResponseEntity<Customer> getCustomer(@RequestParam(value = "customerId", required = true) int customerid){
+        return new ResponseEntity<>(customerService.findCustomer(customerid),HttpStatus.OK);
+    }
     @RequestMapping(path = "/customer/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<SuccessResponse> deleteCustomer(@PathVariable ("id") int customerid) throws SQLException {
         customerService.deleteCustomer(customerid);
