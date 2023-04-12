@@ -34,7 +34,8 @@ public class CustomerService implements CustomerServiceInterface {
 
     @Override
     public void deleteCustomer(int customerId) throws SQLException {
-        customerHashMap.remove(customerId);
+//        customerHashMap.remove(customerId);
+        customerRepository.deleteById(customerId);
     }
 
 
@@ -49,13 +50,7 @@ public class CustomerService implements CustomerServiceInterface {
 
     @Override
     public void updateCustomer(int customerId, Customer customer) {
-     customerRepository.findById(customerId).ifPresentOrElse((
-             customer1 -> {
-              customer1.setBillingAddress(customer.getBillingAddress());
-              customer1.setAccount(customer.getAccount());
-              customer1.setTelephoneNumber(customer.getTelephoneNumber());
-              customerRepository.save(customer1);
-             }),() -> customerRepository.save(customer));
+
     }
 
 
