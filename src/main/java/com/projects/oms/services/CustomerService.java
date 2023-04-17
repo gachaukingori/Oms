@@ -4,6 +4,7 @@ import com.projects.oms.Controllers.CustomerController;
 import com.projects.oms.exceptions.NotFoundException;
 import com.projects.oms.models.*;
 import com.projects.oms.repositories.CustomerRepository;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,11 +18,11 @@ import java.util.Collection;
 import java.util.HashMap;
 
 @Service
+@RequiredArgsConstructor
 public class CustomerService implements CustomerServiceInterface {
    static HashMap<Integer, Customer> customerHashMap = new HashMap<>();
-    @Autowired
-    private  CustomerRepository customerRepository;
 
+    private  final CustomerRepository customerRepository;
     public static final org.slf4j.Logger logger =
             LoggerFactory.getLogger(CustomerController.class);
 
@@ -50,6 +51,16 @@ public class CustomerService implements CustomerServiceInterface {
 
     @Override
     public void updateCustomer(int customerId, Customer customer) {
+        Customer tempCustomer = new PrivateCustomer();
+        if(customer instanceof  BusinessCustomer){
+            tempCustomer = new BusinessCustomer();
+        }
+        tempCustomer = customer;
+     customerRepository
+             .findByCustomerNumber(tempCustomer.getCustomerNumber())
+             .ifPresent((customer1 -> logger.info("customer is "+ customer1.toString())));
+
+
 
     }
 

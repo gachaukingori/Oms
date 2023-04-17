@@ -54,7 +54,8 @@ public class CustomerController {
     @RequestMapping(value = "/updatecustomer/{customerId}", method = RequestMethod.POST)
     public SuccessResponse updateCustomerIfExists(@PathVariable("customerId") int customerId,
                                                   Customer customer){
-        customerService.updateCustomer(customerId,customer);
+        
+//        customerService.updateCustomer(customerId,customer);
         return new SuccessResponse("success");
     }
 
