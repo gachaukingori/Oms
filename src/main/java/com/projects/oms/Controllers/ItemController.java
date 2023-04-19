@@ -4,7 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.projects.oms.configs.Config;
 import com.projects.oms.models.*;
+import com.projects.oms.repositories.ItemRepository;
 import com.projects.oms.services.ItemService;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +20,12 @@ import java.util.Collection;
 import java.util.HashMap;
 @RestController
 @ControllerAdvice
+@RequiredArgsConstructor
 public class ItemController {
 
 
-    @Autowired
-    ItemService itemService;
+
+    private final ItemService itemService;
     @RequestMapping(path = "/newitem", method = RequestMethod.POST)
     public ResponseEntity<String> addNewItem(@RequestBody ArrayList<Item> itemList){
         itemService.addNewItem(itemList);

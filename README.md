@@ -11,6 +11,8 @@ An item stores the item number, the item description, the purchase price and the
 
 ## Installation
 
+Clone the repo 
+
 Cd into the root directory and run
 
 ```bash
