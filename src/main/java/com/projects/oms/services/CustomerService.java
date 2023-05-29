@@ -4,25 +4,29 @@ import com.projects.oms.Controllers.CustomerController;
 import com.projects.oms.exceptions.NotFoundException;
 import com.projects.oms.models.*;
 import com.projects.oms.repositories.CustomerRepository;
+import dto.CustomerDTO;
+import dto.CustomerDTOMapper;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.jdbc.core.*;
 import org.springframework.stereotype.Service;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+//@AllArgsConstructor
 public class CustomerService implements CustomerServiceInterface {
    static HashMap<Integer, Customer> customerHashMap = new HashMap<>();
 
     private  final CustomerRepository customerRepository;
+    @Autowired
+    private  final CustomerDTOMapper customerDTOMapper;
     public static final org.slf4j.Logger logger =
             LoggerFactory.getLogger(CustomerController.class);
 
@@ -45,8 +49,10 @@ public class CustomerService implements CustomerServiceInterface {
     }
 
     @Override
-    public Collection<Customer> getAllCustomers() {
-        return customerRepository.findAll();
+    public Collection<CustomerDTO> getAllCustomers() {
+        return customerRepository.findAll().stream()
+                .map(customerDTOMapper)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -59,8 +65,6 @@ public class CustomerService implements CustomerServiceInterface {
      customerRepository
              .findByCustomerNumber(tempCustomer.getCustomerNumber())
              .ifPresent((customer1 -> logger.info("customer is "+ customer1.toString())));
-
-
 
     }
 

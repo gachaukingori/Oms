@@ -39,12 +39,14 @@ public class ItemService implements ItemServiceInterface {
     public void deleteItem(int itemId) {
         itemRepository.deleteById(itemId);
     }
-    public void updateItemQuantity(int itemNumber, int remainingQuantity ){
-
-        itemRepository.findByItemNumber(itemNumber).ifPresent((item)->{
-            item.setItemQuantity(remainingQuantity);
-            itemRepository.save(item);
-        });
+    public void updateItemQuantity(int itemNumber, int newQuantity ) {
+        itemRepository.findByItemNumber(itemNumber)
+                .ifPresentOrElse((item)->{
+                item.setItemQuantity(item.getItemQuantity() + newQuantity);
+                itemRepository.save(item);
+                 },()->{
+                    throw new NotFoundException("Item not found");
+                });
 
 
     }

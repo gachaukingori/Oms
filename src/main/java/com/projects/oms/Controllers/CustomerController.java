@@ -7,6 +7,7 @@ import com.projects.oms.models.Customer;
 import com.projects.oms.models.JSONResponse;
 import com.projects.oms.services.CustomerService;
 //import jakarta.annotation.Resource;
+import dto.CustomerDTO;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,11 +36,7 @@ public class CustomerController {
 
     record SuccessResponse(String status){
     }
-
-
-
     @RequestMapping(path = "/newcustomer", method = RequestMethod.POST)
-
     public SuccessResponse createNewCustomer(@RequestBody Customer customer){
         customerService.createNewCustomer(customer);
         jsonResponse.setMessage("Customer added succesfully");
@@ -47,7 +44,7 @@ public class CustomerController {
         return new SuccessResponse("success");
     }
     @RequestMapping(path="/allcustomers", method = RequestMethod.GET)
-    public ResponseEntity<Collection<Customer>> getAllCustomers(){
+    public ResponseEntity<Collection<CustomerDTO>> getAllCustomers(){
         return new ResponseEntity<>(customerService.getAllCustomers(), HttpStatus.OK);
     }
 

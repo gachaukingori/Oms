@@ -22,10 +22,8 @@ import java.util.HashMap;
 @ControllerAdvice
 @RequiredArgsConstructor
 public class ItemController {
-
-
-
     private final ItemService itemService;
+    private final JSONResponse jsonResponse;
     @RequestMapping(path = "/newitem", method = RequestMethod.POST)
     public ResponseEntity<String> addNewItem(@RequestBody ArrayList<Item> itemList){
         itemService.addNewItem(itemList);
@@ -33,22 +31,11 @@ public class ItemController {
     }
     @RequestMapping(path = "/itemquantity/{id}", method = RequestMethod.PUT)
     public ResponseEntity<JSONResponse> updateItemQuantity(@PathVariable(name = "id") int itemid, @RequestBody Item item){
-      JSONResponse jsonResponse = new JSONResponse();
-       if(ItemService.itemHashMap.containsKey(itemid)){
-           Item item1 = ItemService.itemHashMap.get(itemid);
-           int newQuantity = item1.getItemQuantity() + item.getItemQuantity();
-           itemService.updateItemQuantity(itemid, newQuantity);
-           jsonResponse.setMessage("Item quantity updated successfully");
-           jsonResponse.setStatus(HttpStatus.OK.toString());
-       }else{
-           jsonResponse.setMessage("Item not found");
-           jsonResponse.setStatus(HttpStatus.OK.toString());
-       }
+          itemService.updateItemQuantity(itemid, item.getItemQuantity());
+          jsonResponse.setMessage("Item quantity updated successfully");
+          jsonResponse.setStatus(HttpStatus.OK.toString());
         return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
     }
-
-
-
     @RequestMapping(value = "/allItems", method = RequestMethod.GET)
     public ResponseEntity<Collection<Item>> getAllItems(){
         return new ResponseEntity<>(itemService.getAllItems(), HttpStatus.OK);
