@@ -1,4 +1,4 @@
-package dto;
+package com.projects.oms.dto;
 
 
 public record CustomerDTO(

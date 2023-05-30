@@ -1,4 +1,4 @@
-package dto;
+package com.projects.oms.dto;
 
 import com.projects.oms.models.Customer;
 import org.springframework.stereotype.Service;

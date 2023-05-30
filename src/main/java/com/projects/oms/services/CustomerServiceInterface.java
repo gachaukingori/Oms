@@ -1,10 +1,9 @@
 package com.projects.oms.services;
 
 import com.projects.oms.models.Customer;
-import dto.CustomerDTO;
+import com.projects.oms.dto.CustomerDTO;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collection;
 
 public interface CustomerServiceInterface {
