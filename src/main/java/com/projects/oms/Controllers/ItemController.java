@@ -25,8 +25,8 @@ public class ItemController {
     private final ItemService itemService;
     private final JSONResponse jsonResponse;
     @RequestMapping(path = "/newitem", method = RequestMethod.POST)
-    public ResponseEntity<String> addNewItem(@RequestBody ArrayList<Item> itemList){
-        itemService.addNewItem(itemList);
+    public ResponseEntity<String> addNewItem(@RequestBody Item item){
+        itemService.addNewItem(item);
         return new ResponseEntity<>("items added successfully", HttpStatus.OK);
     }
     @RequestMapping(path = "/itemquantity/{id}", method = RequestMethod.PUT)

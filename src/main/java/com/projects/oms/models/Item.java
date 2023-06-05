@@ -6,10 +6,7 @@
 package com.projects.oms.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.stereotype.Component;
 
 /**
@@ -33,13 +30,21 @@ public class Item {
     private double purchasePrice;
     private int itemQuantity;
 
+    @Getter(AccessLevel.NONE)
+    @Transient
+    private double salePrice;
+    @PostLoad
+    private void postLoad() {
+        this.salePrice =  this.purchasePrice * 1.1;
+    }
+
     /**
-    
-    @return  sales price to be 10% more than the purchasing price
+    * @return  sales price to be 10% more than the purchasing price
     */
-    public double salesPrice(){
-        double profit = DEFAULT_PERCENTAGE_PROFIT/100 * purchasePrice;
-        return purchasePrice + profit;
+
+
+    public double getSalePrice() {
+        return this.purchasePrice * 1.1;
     }
 
 }

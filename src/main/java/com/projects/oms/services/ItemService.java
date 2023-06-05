@@ -14,28 +14,29 @@ import java.util.Collection;
 import java.util.HashMap;
 @Service
 @RequiredArgsConstructor
-public class ItemService implements ItemServiceInterface {
+public class ItemService  {
     public static HashMap<Integer, Item> itemHashMap = new HashMap<>();
     private final ItemRepository itemRepository;
     static Logger logger = LoggerFactory.getLogger(ItemService.class);
-    @Override
-    public void addNewItem(ArrayList<Item> itemList) {
-        itemRepository.saveAll(itemList);
+
+    public void addNewItem(Item item) {
+        logger.info("item is "+item);
+        itemRepository.save(item);
     }
 
-    @Override
+
     public Collection<Item> getAllItems() {
         return itemRepository.findAll();
     }
 
-    @Override
+
     public Item findItem(int itemId) {
 
         return itemRepository.findById(itemId)
                 .orElseThrow(()->new NotFoundException("Item not found"));
     }
 
-    @Override
+
     public void deleteItem(int itemId) {
         itemRepository.deleteById(itemId);
     }
