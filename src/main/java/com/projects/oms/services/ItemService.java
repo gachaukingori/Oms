@@ -1,5 +1,7 @@
 package com.projects.oms.services;
 
+import com.projects.oms.dto.ItemDTO;
+import com.projects.oms.dto.ItemDTOMapper;
 import com.projects.oms.exceptions.NotFoundException;
 import com.projects.oms.models.Customer;
 import com.projects.oms.models.Item;
@@ -17,6 +19,7 @@ import java.util.HashMap;
 public class ItemService  {
     public static HashMap<Integer, Item> itemHashMap = new HashMap<>();
     private final ItemRepository itemRepository;
+    private final ItemDTOMapper itemDTOMapper;
     static Logger logger = LoggerFactory.getLogger(ItemService.class);
 
     public void addNewItem(Item item) {
@@ -25,8 +28,12 @@ public class ItemService  {
     }
 
 
-    public Collection<Item> getAllItems() {
-        return itemRepository.findAll();
+    public Collection<ItemDTO> getAllItems() {
+        return itemRepository
+                .findAll()
+                .stream().filter(item->item.getItemQuantity()>0)
+                .map(itemDTOMapper)
+                .toList();
     }
 
 

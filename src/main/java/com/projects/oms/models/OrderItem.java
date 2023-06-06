@@ -34,14 +34,11 @@ public class OrderItem  {
     private Item item;
     private int itemNumber;
     public double calculateProfit(){
-        double profit = item.salesPrice() - item.getPurchasePrice();
+        double profit = item.getSalePrice() - item.getPurchasePrice();
         return orderQuantity* profit;
     }
     
      public double calculateItemPrice(){
-        return item.salesPrice();
+        return item.getSalePrice();
     }
-    
-    
-    
 }

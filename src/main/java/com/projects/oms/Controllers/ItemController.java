@@ -3,6 +3,7 @@ package com.projects.oms.Controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.projects.oms.configs.Config;
+import com.projects.oms.dto.ItemDTO;
 import com.projects.oms.models.*;
 import com.projects.oms.repositories.ItemRepository;
 import com.projects.oms.services.ItemService;
@@ -37,7 +38,7 @@ public class ItemController {
         return new ResponseEntity<>(jsonResponse, HttpStatus.OK);
     }
     @RequestMapping(value = "/allItems", method = RequestMethod.GET)
-    public ResponseEntity<Collection<Item>> getAllItems(){
+    public ResponseEntity<Collection<ItemDTO>> getAllItems(){
         return new ResponseEntity<>(itemService.getAllItems(), HttpStatus.OK);
     }
 

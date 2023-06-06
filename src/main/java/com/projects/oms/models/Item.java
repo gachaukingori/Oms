@@ -7,6 +7,7 @@ package com.projects.oms.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Formula;
 import org.springframework.stereotype.Component;
 
 /**
@@ -30,13 +31,17 @@ public class Item {
     private double purchasePrice;
     private int itemQuantity;
 
+    @Column(columnDefinition = "double default null")
     @Getter(AccessLevel.NONE)
-    @Transient
+//    @Transient
+    @Formula("purchasePrice * 1.1")
+
     private double salePrice;
     @PostLoad
     private void postLoad() {
         this.salePrice =  this.purchasePrice * 1.1;
     }
+
 
     /**
     * @return  sales price to be 10% more than the purchasing price
