@@ -48,14 +48,6 @@ public class ItemService  {
         itemRepository.deleteById(itemId);
     }
     public void updateItemQuantity(int itemNumber, int newQuantity ) {
-        itemRepository.findByItemNumber(itemNumber)
-                .ifPresentOrElse((item)->{
-                item.setItemQuantity(item.getItemQuantity() + newQuantity);
-                itemRepository.save(item);
-                 },()->{
-                    throw new NotFoundException("Item not found");
-                });
-
-
+        itemRepository.updateItemQuantity(itemNumber, newQuantity);
     }
 }
