@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ItemService  {
@@ -50,4 +52,20 @@ public class ItemService  {
     public void updateItemQuantity(int itemNumber, int newQuantity ) {
         itemRepository.updateItemQuantity(itemNumber, newQuantity);
     }
+    public double getStockValue(){
+        List<Item> allItems = itemRepository.findAll();
+        double totalValue = 0;
+        for(Item item: allItems){
+            int itemQty = item.getItemQuantity();
+            double purchasePrice = item.getPurchasePrice();
+            double value = itemQty * purchasePrice;
+            totalValue = totalValue + value;
+        }
+        return totalValue;
+//
+//      return  allItems.stream()
+//              .map((item)->item.getItemQuantity()*item.getSalePrice())
+//              .reduce(0.0, Double::sum);
+    }
+
 }
