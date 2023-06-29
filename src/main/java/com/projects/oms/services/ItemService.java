@@ -54,18 +54,9 @@ public class ItemService  {
     }
     public double getStockValue(){
         List<Item> allItems = itemRepository.findAll();
-        double totalValue = 0;
-        for(Item item: allItems){
-            int itemQty = item.getItemQuantity();
-            double purchasePrice = item.getPurchasePrice();
-            double value = itemQty * purchasePrice;
-            totalValue = totalValue + value;
-        }
-        return totalValue;
-//
-//      return  allItems.stream()
-//              .map((item)->item.getItemQuantity()*item.getSalePrice())
-//              .reduce(0.0, Double::sum);
+       return  allItems.stream()
+              .map((item)->item.getItemQuantity()*item.getPurchasePrice())
+              .reduce(0.0, Double::sum);
     }
 
 }
