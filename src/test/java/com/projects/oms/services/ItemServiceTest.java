@@ -28,6 +28,7 @@ class ItemServiceTest {
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
+
         underTest = new ItemService(itemRepository, itemDTOMapper);
 
 
@@ -65,6 +66,10 @@ class ItemServiceTest {
 
     @Test
     void updateItemQuantity() {
+        //given
+        underTest.updateItemQuantity(9,10);
+
+        verify(itemRepository).updateItemQuantity(9,10);
 
     }
     @Test

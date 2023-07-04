@@ -3,6 +3,7 @@ package com.projects.oms.Controllers;
 import com.projects.oms.models.Order;
 import com.projects.oms.models.OrderItem;
 import com.projects.oms.services.OrderItemService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Collection;
 
 @RestController
+@RequiredArgsConstructor
 public class OrderItemController {
-    @Autowired
-    OrderItemService orderItemService;
 
+   private final OrderItemService orderItemService;
     @RequestMapping(path = "/orderitem", method = RequestMethod.POST)
     public ResponseEntity<String> createOrderItem(@RequestBody OrderItem orderItem){
        String response= orderItemService.createOrderItem(orderItem);

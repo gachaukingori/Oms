@@ -17,5 +17,5 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query("UPDATE Item SET itemQuantity = :itemQuantity WHERE itemNumber = :itemNumber ")
-    void updateItemQuantity(@Param("itemQuantity") int itemQuantity, @Param("itemNumber") int itemNumber);
+    int updateItemQuantity(@Param("itemQuantity") int itemQuantity, @Param("itemNumber") int itemNumber);
 }
