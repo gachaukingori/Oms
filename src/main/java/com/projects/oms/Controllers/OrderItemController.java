@@ -1,5 +1,6 @@
 package com.projects.oms.Controllers;
 
+import com.projects.oms.dto.OrderItemDto;
 import com.projects.oms.models.Order;
 import com.projects.oms.models.OrderItem;
 import com.projects.oms.services.OrderItemService;
@@ -26,7 +27,7 @@ public class OrderItemController {
     }
 
     @RequestMapping(path = "/allOrderItems", method = RequestMethod.GET)
-    public ResponseEntity<Collection<OrderItem>> getAllOrderItems(){
+    public ResponseEntity<Collection<OrderItemDto>> getAllOrderItems(){
         return new ResponseEntity<>(orderItemService.getAllOrderItems(), HttpStatus.OK);
     }
 

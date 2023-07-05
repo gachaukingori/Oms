@@ -1,5 +1,7 @@
 package com.projects.oms.services;
 
+import com.projects.oms.dto.ItemOrderDTOMapper;
+import com.projects.oms.dto.OrderItemDto;
 import com.projects.oms.models.Item;
 import com.projects.oms.models.OrderItem;
 import com.projects.oms.repositories.ItemRepository;
@@ -19,6 +21,7 @@ public class OrderItemService {
     static Logger logger = LoggerFactory.getLogger(OrderItemService.class);
 
     private final ItemRepository itemRepository;
+    private final ItemOrderDTOMapper itemOrderDTOMapper;
     public String createOrderItem(OrderItem orderItem){
 
 
@@ -29,7 +32,7 @@ public class OrderItemService {
 
             if (orderItem.getOrderQuantity() > tempItem.getItemQuantity()) {
                 return "sorry! your order exceed the quantity available";
-            } else {
+            }else {
                 orderItem.setItem(tempItem);
                 orderItemHashMap.put(orderItem.getOrderNumber(), orderItem);
                 int remainingQuantity = tempItem.getItemQuantity() - orderItem.getOrderQuantity();
@@ -40,12 +43,13 @@ public class OrderItemService {
 
 
     }
-    public Collection<OrderItem> getAllOrderItems(){
+    public Collection<OrderItemDto> getAllOrderItems(){
         for(OrderItem orderItem : orderItemHashMap.values()){
             logger.info("Order Items are "+orderItem);
         }
 
-        return orderItemHashMap.values();
+        return orderItemHashMap.values().stream().map(itemOrderDTOMapper).toList();
+//        return orderItemHashMap.values();
     }
     public void cartCheckout(){
         for(OrderItem orderItem : orderItemHashMap.values()){
