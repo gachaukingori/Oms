@@ -30,7 +30,6 @@ public class OmsApplication extends SpringBootServletInitializer {
 	public static void main(String[] args) {
 		SpringApplication.run(OmsApplication.class, args);
 
-
 	}
 
 
@@ -43,14 +42,7 @@ public class OmsApplication extends SpringBootServletInitializer {
         return CORSConfigurer.addCORSConfig();
     }
 
-	@GetMapping("/")
-	public GreetResponse secondGet(){
 
-		return new GreetResponse("Welcome to Oms");
-	}
-
-	record GreetResponse(String greet){
-	}
 
 
 }

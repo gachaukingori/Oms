@@ -1,5 +1,6 @@
 package com.projects.oms.repositories;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.projects.oms.Controllers.CustomerController;
 import com.projects.oms.models.Item;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -191,4 +194,25 @@ class ItemRepositoryTest {
 
 
     }
+
+    @Test
+    void testSaveAllWithJackson() throws IOException {
+        //Given
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<Item> items = objectMapper.readValue(new File("src/test/resources/testdata/mockitems.json"),
+                         objectMapper
+                        .getTypeFactory()
+                        .constructCollectionType(List.class,Item.class));
+        // when
+        underTest.saveAll(items);
+       List<Item> sortedItems = underTest.findAll(Sort.by(Sort.Direction.DESC,"itemNumber"));
+
+        String lastItem = sortedItems.get(0).getItemDesc();
+
+
+        //Then
+        assertThat(lastItem).isEqualTo("Table Cloth 72x144 White");
+
+    }
+
 }
