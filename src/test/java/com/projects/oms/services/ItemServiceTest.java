@@ -80,6 +80,8 @@ class ItemServiceTest {
         List<Item> allItems = new ArrayList<Item>();
         allItems.add(item1);
         allItems.add(item2);
+
+        // method stabbing
         when(itemRepository.findAll()).thenReturn(allItems);
 
         double actualValue = underTest.getStockValue();

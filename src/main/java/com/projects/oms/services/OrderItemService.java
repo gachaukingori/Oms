@@ -38,7 +38,7 @@ public class OrderItemService {
                 int remainingQuantity = tempItem.getItemQuantity() - orderItem.getOrderQuantity();
                 logger.info("Current qtt is "+tempItem.getItemQuantity() +" order qty = "+orderItem.getOrderQuantity());
                 itemRepository.updateItemQuantity(remainingQuantity,itemNumber);
-                return "item added  successfully";
+                return "order created  successfully";
             }
 
 

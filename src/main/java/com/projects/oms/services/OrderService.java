@@ -2,6 +2,7 @@ package com.projects.oms.services;
 
 import com.projects.oms.models.Order;
 import com.projects.oms.models.OrderItem;
+import com.projects.oms.repositories.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,13 +16,14 @@ import java.util.Iterator;
 @RequiredArgsConstructor
 public class OrderService {
     public static HashMap<Integer, Order> orderHashMap = new HashMap<>();
+    private final CustomerRepository customerRepository;
     Logger logger = LoggerFactory.getLogger(OrderService.class);
     public final Order order;
 
     public String createOrder(Order order){
 
 //        logger.info("the order objcet is " + order.toString());
-        if(!CustomerService.customerHashMap.containsKey(order.getCustomerid())) {
+        if(customerRepository.findByCustomerNumber(order.getCustomerid()).isEmpty()) {
             return "Customer no "+ order.getCustomerid()+" not found";
         }
         if(!OrderItemService.orderItemHashMap.containsKey(order.getOrderNumber())){
