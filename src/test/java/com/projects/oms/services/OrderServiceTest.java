@@ -1,9 +1,6 @@
 package com.projects.oms.services;
 
-import com.projects.oms.models.BusinessCustomer;
-import com.projects.oms.models.Item;
-import com.projects.oms.models.Order;
-import com.projects.oms.models.OrderItem;
+import com.projects.oms.models.*;
 import com.projects.oms.repositories.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.AfterEach;
@@ -49,10 +46,29 @@ class OrderServiceTest {
     @Test
     void createOrder() {
 
+
+
+        Customer customer  = new BusinessCustomer();
+        customer.setCustomerNumber(2);
+        customer.setTelephoneNumber("+25489038475");
+
+
+        // when  the findCustomer is called then return an Optional Customer
+        Mockito.when(customerRepository.findByCustomerNumber(2)).thenReturn(Optional.of(customer));
+
+        Mockito.when(orderHashmap.containsKey(order.getOrderNumber())).thenReturn(true);
+
+
+        String telephone = customerRepository.findByCustomerNumber(2).get().getTelephoneNumber();
+
         //given
         underTest.createOrder(order);
-        verify(customerRepository).findByCustomerNumber(order.getCustomerid());
+        boolean orderItemExists = orderHashmap.containsKey(order.getOrderNumber());
 
+        assertEquals(telephone, "+25489038475");
+        assertTrue(orderItemExists);
+        // verifies that the method was called with similar arguments passed
+        verify(customerRepository).findByCustomerNumber(order.getCustomerid());
 
     }
 

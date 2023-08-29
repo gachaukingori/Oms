@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import java.beans.ConstructorProperties;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  *
@@ -45,7 +46,7 @@ public class Order {
     private int customerid;
 
     @OneToMany
-    private ArrayList <OrderItem> orderItems;
+    private List<OrderItem> orderItems;
 
      public double getTotalOrderValue(){
          Iterator<OrderItem> iterator = orderItems.iterator();
