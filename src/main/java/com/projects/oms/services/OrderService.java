@@ -31,12 +31,8 @@ public class OrderService {
 
         }
 
-
-
         orderHashMap.put(order.getOrderNumber(), order);
         return "Order created successfully";
-
-
 
     }
 

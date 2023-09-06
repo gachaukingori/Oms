@@ -45,22 +45,16 @@ class OrderServiceTest {
 
     @Test
     void createOrder() {
-
-
-
         Customer customer  = new BusinessCustomer();
         customer.setCustomerNumber(2);
         customer.setTelephoneNumber("+25489038475");
 
-
-        // when  the findCustomer is called then return an Optional Customer
+        // when  the findCustomer is called then return an Optional of Customer pojo
         Mockito.when(customerRepository.findByCustomerNumber(2)).thenReturn(Optional.of(customer));
 
         Mockito.when(orderHashmap.containsKey(order.getOrderNumber())).thenReturn(true);
 
-
         String telephone = customerRepository.findByCustomerNumber(2).get().getTelephoneNumber();
-
         //given
         underTest.createOrder(order);
         boolean orderItemExists = orderHashmap.containsKey(order.getOrderNumber());
