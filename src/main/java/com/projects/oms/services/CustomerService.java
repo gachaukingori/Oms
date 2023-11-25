@@ -34,12 +34,10 @@ public class CustomerService {
 
     public void createNewCustomer(Customer customer) {
         customerRepository.save(customer);
-//        customerList.forEach((customer)-> customerHashMap.put(customer.getCustomerNumber(), customer));
     }
 
 
     public void deleteCustomer(int customerId) throws SQLException {
-
         customerRepository.deleteById(customerId);
     }
 
@@ -57,7 +55,6 @@ public class CustomerService {
                 .map(customerDTOMapper)
                 .toList();
     }
-
 
     public void updateCustomer(int customerId, Customer customer) {
      customerRepository
