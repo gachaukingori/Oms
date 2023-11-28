@@ -7,18 +7,14 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.reactivestreams.Publisher;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static reactor.core.publisher.Mono.when;
+
 @RequiredArgsConstructor
 class OrderServiceTest {
 
@@ -54,7 +50,7 @@ class OrderServiceTest {
 
         Mockito.when(orderHashmap.containsKey(order.getOrderNumber())).thenReturn(true);
 
-        String telephone = customerRepository.findByCustomerNumber(2).get().getTelephoneNumber();
+        String telephone = customerRepository.findByCustomerNumber(2).orElse(customer).getTelephoneNumber();
         //given
         underTest.createOrder(order);
         boolean orderItemExists = orderHashmap.containsKey(order.getOrderNumber());

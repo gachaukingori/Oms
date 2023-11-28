@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.projects.oms.models;
 
 import com.projects.oms.services.OrderItemService;
@@ -15,34 +11,21 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- *
- 
- */
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-//@RequiredArgsConstructor(onConstructor_ = @ConstructorProperties({"orderNumber", "customerid", "orderItems"}))
 @Component
 @Entity
 @Table(name="ORDERS")
 
 public class Order {
-//    public static final int DEFAULT_ODRDER_NUMBER = 1;
-//
-//    private  static final Item DEFAULT_ITEM = null;
-//    private static final OrderItem DEFAULT_ORDER_ITEM = null;
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO )
     private  Integer id;
-
     private int orderNumber;
-//    private Date orderDate;
-//    @ManyToOne
-//    private Customer customer;
-
     private int customerid;
 
     @OneToMany

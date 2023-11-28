@@ -8,29 +8,24 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
 @RestController
+@RequestMapping("/api/v1/orders")
 public class OrderController {
     Logger logger = LoggerFactory.getLogger(OrderController.class);
 
     @Autowired
     OrderService orderService;
 
-    @RequestMapping(path = "/createOrder", method = RequestMethod.POST)
+    @PostMapping(path = "/createOrder")
     public ResponseEntity<String> createNewOrder(@RequestBody Order order){
         return new ResponseEntity<>(orderService.createOrder(order), HttpStatus.OK);
     }
-
-    @RequestMapping(path="/getOrders", method = RequestMethod.GET)
-
+    @GetMapping(path="/getOrders")
     public ResponseEntity<Collection<Order>>getAllOrders(){
-
         return new ResponseEntity<>(orderService.getOrderDetails(), HttpStatus.OK);
     }
 }

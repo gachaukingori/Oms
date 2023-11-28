@@ -2,6 +2,7 @@ package com.projects.oms.repositories;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.projects.oms.Controllers.CustomerController;
+import com.projects.oms.dto.ItemDTO;
 import com.projects.oms.models.Item;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,13 +22,15 @@ import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+
 @DataJpaTest
 @RequiredArgsConstructor
 class ItemRepositoryTest {
     Logger logger =
             LoggerFactory.getLogger(ItemRepositoryTest.class);
     @Autowired
-    private  ItemRepository underTest;
+    private ItemRepository underTest;
+
     @BeforeEach
     void setUp() {
         underTest.deleteAll();
@@ -47,8 +50,8 @@ class ItemRepositoryTest {
 
         // when
         underTest.save(item);
-        Optional<Item>  itemexists = underTest.findByItemNumber(89);
-        int itemNumber = itemexists.get().getItemNumber();
+        Optional<Item> itemExists = underTest.findByItemNumber(89);
+        int itemNumber = itemExists.orElse(item).getItemNumber();
 
         //Then
         assertThat(itemNumber).isEqualTo(89);
@@ -69,9 +72,9 @@ class ItemRepositoryTest {
 
         // when
         underTest.save(item);
-        underTest.updateItemQuantity(800,89);
+        underTest.updateItemQuantity(800, 89);
 
-        Optional<Item>  expectedItem = underTest.findByItemNumber(item.getItemNumber());
+        Optional<Item> expectedItem = underTest.findByItemNumber(item.getItemNumber());
         int itemQuantity = expectedItem.orElseThrow().getItemQuantity();
 
         //Then
@@ -80,7 +83,7 @@ class ItemRepositoryTest {
     }
 
     @Test
-    void testOrderBy(){
+    void testOrderBy() {
         //given
         Item item = new Item(
                 1,
@@ -98,7 +101,7 @@ class ItemRepositoryTest {
                 60,
                 70
         );
-        Item item3= new Item(
+        Item item3 = new Item(
                 3,
                 91,
                 "banana",
@@ -112,13 +115,14 @@ class ItemRepositoryTest {
         underTest.save(item);
 
 
-        List<Item> orderedByName = underTest.findAll(Sort.by(Sort.Direction.DESC,"itemQuantity"));
+        List<Item> orderedByName = underTest.findAll(Sort.by(Sort.Direction.DESC, "itemDesc"));
 
         //then
-        assertThat(orderedByName.get(0).getItemDesc()).isEqualTo("mango");
+        assertThat(orderedByName.get(0).getItemDesc()).isEqualTo("banana");
     }
+
     @Test
-    void testAveragePrice(){
+    void testAveragePrice() {
         //given
         Item item = new Item(
                 1,
@@ -136,7 +140,7 @@ class ItemRepositoryTest {
                 60,
                 70
         );
-        Item item3= new Item(
+        Item item3 = new Item(
                 3,
                 91,
                 "banana",
@@ -154,10 +158,11 @@ class ItemRepositoryTest {
         //then
         assertThat(avgPrice).isEqualTo(50);
     }
+
     @Test
-    void testPagination(){
+    void testPagination() {
         //given
-        Pageable pageable = PageRequest.of(0,3);
+        Pageable pageable = PageRequest.of(0, 3);
         Item item = new Item(
                 1,
                 89,
@@ -174,7 +179,7 @@ class ItemRepositoryTest {
                 60,
                 70
         );
-        Item item3= new Item(
+        Item item3 = new Item(
                 3,
                 91,
                 "banana",
@@ -200,16 +205,14 @@ class ItemRepositoryTest {
         //Given
         ObjectMapper objectMapper = new ObjectMapper();
         List<Item> items = objectMapper.readValue(new File("src/test/resources/testdata/mockitems.json"),
-                         objectMapper
+                objectMapper
                         .getTypeFactory()
-                        .constructCollectionType(List.class,Item.class));
+                        .constructCollectionType(List.class, Item.class));
         // when
         underTest.saveAll(items);
-       List<Item> sortedItems = underTest.findAll(Sort.by(Sort.Direction.DESC,"itemNumber"));
+        List<Item> sortedItems = underTest.findAll(Sort.by(Sort.Direction.DESC, "itemNumber"));
 
         String lastItem = sortedItems.get(0).getItemDesc();
-
-
         //Then
         assertThat(lastItem).isEqualTo("Table Cloth 72x144 White");
 

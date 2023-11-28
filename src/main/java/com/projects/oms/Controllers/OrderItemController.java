@@ -8,26 +8,25 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/orderItems")
 public class OrderItemController {
 
-   private final OrderItemService orderItemService;
-    @RequestMapping(path = "/orderitem", method = RequestMethod.POST)
-    public ResponseEntity<String> createOrderItem(@RequestBody OrderItem orderItem){
-       String response= orderItemService.createOrderItem(orderItem);
+    private final OrderItemService orderItemService;
+
+    @PostMapping("/orderitem")
+    public ResponseEntity<String> createOrderItem(@RequestBody OrderItem orderItem) {
+        String response = orderItemService.createOrderItem(orderItem);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/allOrderItems", method = RequestMethod.GET)
-    public ResponseEntity<Collection<OrderItemDto>> getAllOrderItems(){
+    @GetMapping("/allOrderItems")
+    public ResponseEntity<Collection<OrderItemDto>> getAllOrderItems() {
         return new ResponseEntity<>(orderItemService.getAllOrderItems(), HttpStatus.OK);
     }
 

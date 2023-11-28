@@ -9,10 +9,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@SpringBootApplication
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.Arrays;
 
+@SpringBootApplication
 public class OmsApplication extends SpringBootServletInitializer {
 	public static final Logger logger =
 			LoggerFactory.getLogger(OmsApplication.class);
@@ -24,6 +28,7 @@ public class OmsApplication extends SpringBootServletInitializer {
 	public SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
 		return builder.sources(OmsApplication.class);
 	}
+
     @Bean
     public WebMvcConfigurer corsConfigurer(){
         return CORSConfigurer.addCORSConfig();

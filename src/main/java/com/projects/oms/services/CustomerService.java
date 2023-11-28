@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-//@AllArgsConstructor
+
 public class CustomerService {
    static HashMap<Integer, Customer> customerHashMap = new HashMap<>();
 

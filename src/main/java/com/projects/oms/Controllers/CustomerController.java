@@ -18,44 +18,40 @@ import java.util.*;
 @ControllerAdvice
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/customer")
 public class CustomerController {
-
     public static final Logger logger =
             LoggerFactory.getLogger(CustomerController.class);
-   private final CustomerService customerService;
-
-
-    // replace this with record java 17
-
-
-   public record SuccessResponse(String status){
+    private final CustomerService customerService;
+    public record SuccessResponse(String status) {
     }
-    @RequestMapping(path = "/newcustomer", method = RequestMethod.POST)
-    public SuccessResponse createNewCustomer(@RequestBody Customer customer){
+    @PostMapping(path = "/newcustomer")
+    public SuccessResponse createNewCustomer(@RequestBody Customer customer) {
         customerService.createNewCustomer(customer);
 
         return new SuccessResponse("success");
     }
-    @RequestMapping(path="/allcustomers", method = RequestMethod.GET)
-    public ResponseEntity<Collection<CustomerDTO>> getAllCustomers(){
+
+    @GetMapping(path = "/allcustomers")
+    public ResponseEntity<Collection<CustomerDTO>> getAllCustomers() {
         return new ResponseEntity<>(customerService.getAllCustomers(), HttpStatus.OK);
     }
-
-    @RequestMapping(value = "/updatecustomer/{customerId}", method = RequestMethod.POST)
-    public SuccessResponse updateCustomerIfExists(@PathVariable("customerId") int customerId, @RequestBody Customer customer){
-       logger.info(customer.toString());
+    @PostMapping(value = "/updatecustomer/{customerId}")
+    public SuccessResponse updateCustomerIfExists(@PathVariable("customerId") int customerId, @RequestBody Customer customer) {
+        logger.info(customer.toString());
         customerService.updateCustomer(customerId, customer);
         return new SuccessResponse("success");
     }
 
-    @GetMapping(path = "/customer")
-    public ResponseEntity<Customer> getCustomer(@RequestParam(value = "customerId", required = true) int customerid){
-        return new ResponseEntity<>(customerService.findCustomer(customerid),HttpStatus.OK);
+    @GetMapping(path = "/customerWithId")
+    public ResponseEntity<Customer> getCustomer(@RequestParam(value = "customerId", required = true) int customerid) {
+        return new ResponseEntity<>(customerService.findCustomer(customerid), HttpStatus.OK);
     }
-    @RequestMapping(path = "/customer/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<SuccessResponse> deleteCustomer(@PathVariable ("id") int customerid) throws SQLException {
+
+    @DeleteMapping(path = "/deletecustomer/{id}")
+    public ResponseEntity<SuccessResponse> deleteCustomer(@PathVariable("id") int customerid) throws SQLException {
         customerService.deleteCustomer(customerid);
-        return new ResponseEntity<>(HttpStatus.OK );
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
