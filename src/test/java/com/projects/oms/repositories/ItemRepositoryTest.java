@@ -5,6 +5,7 @@ import com.projects.oms.Controllers.CustomerController;
 import com.projects.oms.dto.ItemDTO;
 import com.projects.oms.models.Item;
 import lombok.RequiredArgsConstructor;
+import org.instancio.Instancio;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -61,18 +62,11 @@ class ItemRepositoryTest {
     @Test
     void updateItemQuantity() {
         // given
-        Item item = new Item(
-                1,
-                89,
-                "Pineapple",
-                70,
-                8,
-                40
-        );
+       Item item =  Instancio.create(Item.class);
 
         // when
         underTest.save(item);
-        underTest.updateItemQuantity(800, 89);
+        underTest.updateItemQuantity(800, item.getItemNumber());
 
         Optional<Item> expectedItem = underTest.findByItemNumber(item.getItemNumber());
         int itemQuantity = expectedItem.orElseThrow().getItemQuantity();
